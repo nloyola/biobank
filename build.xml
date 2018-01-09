@@ -65,7 +65,7 @@
     <include name="spiffy-all.jar" />
     <include name="supercsv.jar" />
     <include name="commons-lang.jar" />
-	<include name="commons-lang3.jar" />
+    <include name="commons-lang3.jar" />
   </fileset>
 
   <fileset id="biobank.common.client.build.classpath" dir="${eclipse.proj.dir.common}/lib/client">
@@ -267,12 +267,12 @@
 
   <target name="create-messages-jar" depends="check-messages-jar-exists"
 	  unless="messages-jar-exists">
-    <antcall target="messages-jar "/>
+    <antcall target="messages-jar"/>
   </target>
 
 
   <target name="versions-update"
-      depends="server-manifest,biobank-version-modify"
+          depends="server-manifest,biobank-version-modify"
 	  description="--> update version strings on server and client">
   </target>
 
@@ -320,7 +320,7 @@
     <copy file="${lib.dir}/messages.jar" todir="${eclipse.proj.dir}/lib"/>
     <copy file="${lib.dir}/messages.jar" todir="${eclipse.proj.dir.common}/lib/client"/>
 
-    <!-- File needed in the test project to call csm api methods -->
+      <!-- File needed in the test project to call csm api methods -->
     <copy file="sdk_conf/biobank.csm.new.hibernate.cfg.xml" todir="${eclipse.proj.dir.tests}/src" />
   </target>
 
@@ -436,7 +436,7 @@
 
     <copy todir="${secu-log.dir}/tomcat" overwrite="true">
       <fileset dir="${secu-log.dir}/tomcat">
-		<exclude name="**/console/**" />
+	<exclude name="**/console/**" />
       </fileset>
       <globmapper from="*.template" to="*"/>
       <filterset>
@@ -508,7 +508,7 @@
 
   <target name="package-webapp" depends="build-common-project,update-db-config">
      <echo>database.host : ${database.host}</echo>
-	<mkdir dir="${output.dir}" />
+    <mkdir dir="${output.dir}" />
     <delete dir="webapp/db"/>
     <copy includeemptydirs="false" todir="webapp">
       <fileset dir=".">
@@ -537,7 +537,7 @@
       </classes>
       <webinf dir="webapp/WEB-INF">
         <include name="**/*" />
-		<exclude name="**/web.xml" />
+	<exclude name="**/web.xml" />
       </webinf>
     </war>
   </target>

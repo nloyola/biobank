@@ -226,16 +226,8 @@ public abstract class BatchOpViewForm extends BiobankViewForm {
         this.fileMetaData = fileMetaData;
     }
 
-    protected static void openForm(Integer batchOpId, String formId, boolean focusOnEditor)
-        throws PartInitException {
-        BatchOpViewFormInput input = new BatchOpViewFormInput(batchOpId);
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-            .openEditor(input, formId, focusOnEditor);
-    }
-
-    public static class BatchOpViewFormInput extends FormInput {
-
-        private final Integer batchOpId;
+    public static class SpecimenBatchOpViewFormInput
+        extends FormInput {
 
         @SuppressWarnings("nls")
         public BatchOpViewFormInput(Integer batchOpId) {

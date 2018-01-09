@@ -47,9 +47,9 @@ import edu.ualberta.med.biobank.test.action.batchoperation.AssertBatchOpExceptio
 import edu.ualberta.med.biobank.test.action.batchoperation.CsvUtil;
 
 /**
- *
+ * 
  * @author Nelson Loyola
- *
+ * 
  */
 public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatchOpInputPojo> {
 
@@ -166,10 +166,10 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
         Set<Patient> patients = new HashSet<Patient>();
 
         session.beginTransaction();
-        Patient patient = factory.createPatient();
-        patients.add(patient);
+            Patient patient = factory.createPatient();
+            patients.add(patient);
         factory.createCollectionEvent();
-        factory.createSourceSpecimen();
+                factory.createSourceSpecimen();
         session.getTransaction().commit();
 
         // make sure you can add parent specimens without a worksheet #
@@ -475,7 +475,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
 
     /*
      * Test if we can import aliquoted specimens only.
-     *
+     * 
      * The CSV file has no positions here.
      */
     @Test
@@ -602,7 +602,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
         session.getTransaction().commit();
 
         for (String testCase : Arrays.asList("empty", "invalid")) {
-            // make sure you can add parent specimens without a worksheet #
+        // make sure you can add parent specimens without a worksheet #
             Set<SpecimenBatchOpInputPojo> pojos =
                 specimenCsvHelper.sourceSpecimensCreate(session, originInfos, patients);
 
@@ -610,8 +610,8 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
                 for (SpecimenBatchOpInputPojo pojo : pojos) {
                     if (pojo.getPatientNumber() != null) {
                         pojo.setPatientNumber(StringUtil.EMPTY_STRING);
-                    }
-                }
+            }
+        }
             } else {
                 for (SpecimenBatchOpInputPojo pojo : pojos) {
                     if (pojo.getPatientNumber() != null) {
@@ -622,17 +622,17 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
 
             SpecimenBatchOpCsvWriter.write(CSV_NAME, pojos);
 
-            try {
+        try {
                 SpecimenBatchOpAction importAction =
                     new SpecimenBatchOpAction(factory.getDefaultSite(), pojos, new File(CSV_NAME));
-                exec(importAction);
+            exec(importAction);
                 fail("should not be allowed to create aliquot specimens with invalid patients");
-            } catch (BatchOpErrorsException e) {
-                new AssertBatchOpException()
+        } catch (BatchOpErrorsException e) {
+            new AssertBatchOpException()
                     .withMessage(CSV_PATIENT_NUMBER_INVALID_ERROR.format())
-                    .assertIn(e);
-            }
+                .assertIn(e);
         }
+    }
     }
 
     @Test
@@ -850,7 +850,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
             @Override
             public Set<SpecimenBatchOpInputPojo> create() {
                 return specimenCsvHelper.createAliquotedSpecimens(patients);
-            }
+        }
         });
     }
 
@@ -863,7 +863,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
                 return specimenCsvHelper.createAllSpecimens(session,
                                                             originInfos,
                                                             fixture.patients);
-            }
+        }
         });
     }
 
@@ -876,8 +876,8 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
             Patient patient = factory.createPatient();
             patients.add(patient);
             factory.createCollectionEvent();
-            factory.createSourceSpecimen();
-        }
+                factory.createSourceSpecimen();
+            }
         session.getTransaction().commit();
 
         Set<Container> childL2Containers =
@@ -892,8 +892,8 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
             specimenCsvHelper.sourceSpecimensCreate(session, originInfos, patients);
 
         SpecimenBatchOpPojoHelper.assignPositionsToPojos(pojos,
-                                                         childL2Containers,
-                                                         false);
+            childL2Containers,
+            false);
 
         SpecimenBatchOpCsvWriter.write(CSV_NAME, pojos);
 
@@ -914,7 +914,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
         Set<Patient> patients = new HashSet<Patient>();
 
         session.beginTransaction();
-        factory.createSourceSpecimen();
+                factory.createSourceSpecimen();
         Patient patient = factory.createPatient();
         patients.add(patient);
         factory.createCollectionEvent();
@@ -964,7 +964,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
 
                 peventMap.put(parentSpecimen.getInventoryId(), pevent);
                 log.trace("added processing event: invId={} worsheet={}",
-                          parentSpecimen.getInventoryId(), pevent.getWorksheet());
+                    parentSpecimen.getInventoryId(), pevent.getWorksheet());
             }
         }
 
@@ -1103,7 +1103,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
             patients.add(factory.createPatient());
             factory.createCollectionEvent();
             factory.createSourceSpecimen();
-        }
+            }
         session.getTransaction().commit();
 
         withProductBarcodesAndPositions(new IPojosCreator<SpecimenBatchOpInputPojo>() {
@@ -1112,7 +1112,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
                 return specimenCsvHelper.sourceSpecimensCreate(session, originInfos, patients);
             }
         });
-    }
+            }
 
     @Test
     public void withInvalidContainerInformation() throws Exception {
@@ -1129,10 +1129,10 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
                 @Override
                 public Set<SpecimenBatchOpInputPojo> create() {
                     return specimenCsvHelper.sourceSpecimensCreate(session, originInfos, patients);
-                }
+            }
             };
         withInvalidContainerInformation(pojosCreator, false);
-    }
+                }
 
     @Test
     public void withInvalidSpecimenPositions() throws Exception {
@@ -1150,12 +1150,12 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
             @Override
             public Set<SpecimenBatchOpInputPojo> create() {
                 return specimenCsvHelper.sourceSpecimensCreate(session, originInfos, patients);
-            }
+                    }
         };
         Set<SpecimenType> specimenTypes = new HashSet<SpecimenType>();
         specimenTypes.add(factory.getDefaultSourceSpecimenType());
         withInvalidSpecimenPositions(pojosCreator, specimenTypes);
-    }
+            }
 
     @Test
     public void withInvalidSpecimenTypes() throws Exception {
@@ -1172,9 +1172,9 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
             @Override
             public Set<SpecimenBatchOpInputPojo> create() {
                 return specimenCsvHelper.sourceSpecimensCreate(session, originInfos, patients);
-            }
+                }
         });
-    }
+            }
 
     @Test
     public void withInvalidContainerType() throws Exception {
@@ -1223,7 +1223,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
         withPositionsAlreadyOccupied(pojosCreator,
                                      specimenTypes,
                                      patients.iterator().next());
-    }
+        }
 
     @Test(expected = IllegalStateException.class)
     public void errorsIfInventoryIdFoundMoreThanOnce() throws Exception {
@@ -1270,7 +1270,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
     /**
      * Parent specimens should not be imported if the specimen type is not in the list of source
      * specimens for a study.
-     *
+     * 
      * @throws IOException
      * @throws NoSuchAlgorithmException
      * @throws ClassNotFoundException
@@ -1311,7 +1311,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
     /**
      * Child specimens should not be imported if the specimen type is not in the list of aliquoted
      * specimens for a study.
-     *
+     * 
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
@@ -1365,7 +1365,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
                 return specimenCsvHelper.createAllSpecimens(session, originInfos, fixture.patients);
             }
         });
-    }
+        }
 
     @Test
     public void currentCenterIsValid() throws Exception {
@@ -1374,7 +1374,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
             @Override
             public Set<SpecimenBatchOpInputPojo> create() {
                 return specimenCsvHelper.createAllSpecimens(session, originInfos, fixture.patients);
-            }
+        }
         });
     }
 
@@ -1416,7 +1416,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
         if (pojo.getCurrentCenter() != null) {
             assertEquals(pojo.getCurrentCenter(),
                                 specimen.getCurrentCenter().getNameShort());
-        }
+    }
 
         if (pojo.getSourceSpecimen()) {
             assertNotNull(specimen.getOriginalCollectionEvent());
@@ -1441,7 +1441,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
                     assertEquals(pojo.getWorksheet(),
                                  specimen.getProcessingEvent().getWorksheet());
                 }
-            }
+        }
 
             if (pojo.getVolume() != null) {
                 assertTrue(specimen.getQuantity().compareTo(pojo.getVolume()) == 0);
@@ -1453,7 +1453,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
     protected File writePojosToCsv(Set<SpecimenBatchOpInputPojo> pojos) throws IOException {
         SpecimenBatchOpCsvWriter.write(CSV_NAME, pojos);
         return new File(CSV_NAME);
-    }
+        }
 
     @Override
     protected Action<IdResult> createAction(Set<SpecimenBatchOpInputPojo> pojos, File file)
@@ -1465,7 +1465,7 @@ public class TestSpecimenBatchOp extends CommonSpecimenBatchOpTests<SpecimenBatc
 
 final class SimpleTestFixture {
 
-    Set<Patient> patients = new HashSet<Patient>();
+        Set<Patient> patients = new HashSet<Patient>();
 
     SimpleTestFixture(Session session, Factory factory) {
         session.beginTransaction();
@@ -1476,5 +1476,5 @@ final class SimpleTestFixture {
         factory.createSpecimenType();
         factory.createAliquotedSpecimen();
         session.getTransaction().commit();
-    }
+        }
 }

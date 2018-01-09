@@ -58,10 +58,10 @@ public class GenericAppArgs {
         optionList.addAll(extraOptions);
         for (Option option : optionList) {
             options.addOption(option);
-        }
-
-        line = parser.parse(options, argv);
     }
+
+            line = parser.parse(options, argv);
+            }
 
     /**
      * Parses the command line arguments.
@@ -69,22 +69,22 @@ public class GenericAppArgs {
      */
     public GenericAppArgs(String[] argv) throws ParseException {
         this(argv, new ArrayList<Option>(0));
-    }
+            }
 
     public boolean helpOption() {
         return hasOption(OPT_HELP);
-    }
+            }
 
     public boolean verboseOption() {
         return hasOption(OPT_VERBOSE);
-    }
+            }
 
     public String hostOption() {
         if (hasOption(OPT_HOST)) {
             return line.getOptionValue(OPT_HOST);
         }
         return StringUtil.EMPTY_STRING;
-    }
+            }
 
     public int portOption() {
         try {

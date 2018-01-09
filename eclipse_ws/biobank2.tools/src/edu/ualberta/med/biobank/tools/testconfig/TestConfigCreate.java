@@ -6,23 +6,23 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Used to create a configuration to easily test with. Creates the following
- *
+ * 
  * - One clinic, named "Clinic1". Has one contact.
- *
+ * 
  * - One study, named "Study1". Has contact from Clinic1.
- *
+ * 
  * - One patient is created, "1100", which has one collection event and one parent specimen with
- *   inventory ID "A100".
- *
+ * inventory ID "A100".
+ * 
  * - Two site, names "Site1" and "Site2".
- *
+ * 
  * @author Nelson Loyola
- *
+ * 
  */
 public class TestConfigCreate {
 
     private static String USAGE = "Usage: testconfigcreate\n\n"
-                                  + "\tReads options from db.properties file.";
+        + "\tReads options from db.properties file.";
 
     private static final Logger log = LoggerFactory.getLogger(TestConfigCreate.class);
 
@@ -43,10 +43,10 @@ public class TestConfigCreate {
                 new AliquotsTestConfig(args);
             } else {
                 new TestConfig(args);
-            }
-            log.info("testing configuration created");
+        }
+        log.info("testing configuration created");
         } catch (Exception e) {
             e.printStackTrace();
-        }
+    }
     }
 }

@@ -35,9 +35,9 @@ import edu.ualberta.med.biobank.util.CompressedReference;
 /**
  * This action takes a list of Specimen Batch Operation beans as input, verifies that the data is
  * valid, and if valid saves the data to the database.
- *
+ * 
  * @author Nelson Loyola
- *
+ * 
  */
 @SuppressWarnings("nls")
 public class SpecimenBatchOpAction extends CommonSpecimenBatchOpAction<SpecimenBatchOpInputPojo> {
@@ -55,14 +55,14 @@ public class SpecimenBatchOpAction extends CommonSpecimenBatchOpAction<SpecimenB
     private final BatchOpInputErrorSet errorSet = new BatchOpInputErrorSet();
 
     public SpecimenBatchOpAction(Center                        workingCenter,
-                                 Set<SpecimenBatchOpInputPojo> batchOpSpecimens,
-                                 File                          inputFile)
+        Set<SpecimenBatchOpInputPojo> batchOpSpecimens,
+        File inputFile)
         throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
         super(workingCenter,
               new CompressedReference<ArrayList<SpecimenBatchOpInputPojo>>(
                 new ArrayList<SpecimenBatchOpInputPojo>(batchOpSpecimens)),
               inputFile);
-    }
+        }
 
     @Override
     protected void decompressData() {
@@ -220,8 +220,8 @@ public class SpecimenBatchOpAction extends CommonSpecimenBatchOpAction<SpecimenB
 
     // get referenced items that exist in the database
     private SpecimenBatchOpDbInfo getDbInfo(ActionContext context,
-                                             SpecimenBatchOpInputPojo inputPojo,
-                                             SpecimenBatchOpInputPojo parentInputPojo) {
+        SpecimenBatchOpInputPojo inputPojo,
+        SpecimenBatchOpInputPojo parentInputPojo) {
         Specimen spc = BatchOpActionUtil.getSpecimen(context.getSession(), inputPojo.getInventoryId());
         if (spc != null) {
             errorSet.addError(inputPojo.getLineNumber(),
@@ -309,8 +309,8 @@ public class SpecimenBatchOpAction extends CommonSpecimenBatchOpAction<SpecimenB
                 errorSet.addError(inputPojo.getLineNumber(),
                                   SpecimenBatchOpActionErrors.CSV_CEVENT_ERROR.
                                       format(inputPojo.getPatientNumber(),
-                                             inputPojo.getVisitNumber()));
-            }
+                            inputPojo.getVisitNumber()));
+                }
         } else {
             pojoData.setCevent(cevent);
             pojoData.setPatient(cevent.getPatient());
@@ -381,7 +381,7 @@ public class SpecimenBatchOpAction extends CommonSpecimenBatchOpAction<SpecimenB
         return pojoData;
     }
 
-    private Specimen addSpecimen(ActionContext          context,
+    private Specimen addSpecimen(ActionContext context,
                                  BatchOperation         batchOp,
                                  SpecimenBatchOpDbInfo pojoData,
                                  ProcessingEvent        pevent) {

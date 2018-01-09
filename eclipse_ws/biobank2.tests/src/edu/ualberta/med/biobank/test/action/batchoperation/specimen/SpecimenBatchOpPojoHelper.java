@@ -97,7 +97,7 @@ public class SpecimenBatchOpPojoHelper {
      * @param patients the patients that these specimens will belong to.
      */
     Set<SpecimenBatchOpInputPojo> sourceSpecimensCreate(Session session,
-                                                        Set<OriginInfo> originInfos,
+        Set<OriginInfo> originInfos,
                                                         Set<Patient>    patients) {
 
         checkForSourceSpecimensInDb(session);
@@ -106,7 +106,7 @@ public class SpecimenBatchOpPojoHelper {
         Set<SpecimenBatchOpInputPojo> pojos = new HashSet<SpecimenBatchOpInputPojo>(0);
         for (Patient patient: patients) {
             Set<SourceSpecimen> sourceSpecimens = patient.getStudy().getSourceSpecimens();
-            for (SourceSpecimen ss : sourceSpecimens) {
+        for (SourceSpecimen ss : sourceSpecimens) {
                 for (OriginInfo originInfo : originInfos) {
                     for (CollectionEvent event : patient.getCollectionEvents()) {
                         SpecimenBatchOpInputPojo pojo =
@@ -115,9 +115,9 @@ public class SpecimenBatchOpPojoHelper {
                                                  originInfo.getShipmentInfo().getWaybill(),
                                                  ss.getSpecimenType().getName());
                         pojos.add(pojo);
-                    }
                 }
             }
+        }
         }
         Assert.assertTrue(pojos.size() > 0);
         assignLineNumbers(pojos);
@@ -147,8 +147,8 @@ public class SpecimenBatchOpPojoHelper {
                                                     as.getSpecimenType().getName());
                         pojo.setParentInventoryId(parentSpecimen.getInventoryId());
                         pojos.add(pojo);
-                    }
-                }
+        }
+        }
             }
         }
         Assert.assertTrue(pojos.size() > 0);
@@ -187,8 +187,8 @@ public class SpecimenBatchOpPojoHelper {
                                              null,
                                              ss.getSpecimenType().getName());
                     patientInfo.pojos.add(pojo);
-                }
             }
+        }
         }
         return patientData;
     }
@@ -198,8 +198,9 @@ public class SpecimenBatchOpPojoHelper {
                              Set<AliquotedSpecimen> aliquotedSpecimens) {
         Set<SpecimenBatchOpInputPojo> pojos = new LinkedHashSet<SpecimenBatchOpInputPojo>();
 
-        for (Patient patient : patients) {
-            for (CollectionEvent ce : patient.getCollectionEvents()) {
+        for (AliquotedSpecimen as : aliquotedSpecimens) {
+            for (Patient patient : patients) {
+                for (CollectionEvent ce : patient.getCollectionEvents()) {
                 for (AliquotedSpecimen as : aliquotedSpecimens) {
                     SpecimenBatchOpInputPojo pojo =
                         genericSpecimenCreate(null, as.getSpecimenType().getName());
@@ -261,8 +262,8 @@ public class SpecimenBatchOpPojoHelper {
 
     public static <T extends IBatchOpSpecimenPositionPojo> void
     assignPositionsToPojos(Set<T>         pojos,
-                           Set<Container> containers,
-                           boolean        useProductBarcode) {
+        Set<Container> containers,
+        boolean useProductBarcode) {
         // fill as many containers as space will allow
         Set<T> pojosToAssign = new LinkedHashSet<T>(pojos);
         Iterator<T> iterator = pojosToAssign.iterator();
@@ -283,10 +284,10 @@ public class SpecimenBatchOpPojoHelper {
                     csvInfo.setPalletPosition(ctype.getPositionString(pos));
 
                     if (useProductBarcode) {
-                        csvInfo.setPalletProductBarcode(container.getProductBarcode());
+                       csvInfo.setPalletProductBarcode(container.getProductBarcode());
                     } else {
-                        csvInfo.setPalletLabel(container.getLabel());
-                        csvInfo.setRootContainerType(ctype.getNameShort());
+                       csvInfo.setPalletLabel(container.getLabel());
+                       csvInfo.setRootContainerType(ctype.getNameShort());
                     }
                 }
             }
@@ -361,10 +362,10 @@ public class SpecimenBatchOpPojoHelper {
         int count = 0;
         for (SpecimenBatchOpInputPojo pojo : pojos) {
             pojo.setLineNumber(count);
-            count++;
-        }
+                    count++;
+                }
 
-    }
+            }
 
     public static Set<SpecimenType> getStudySourceAndAliquotSpecimentTypes(Study study) {
         Set<SpecimenType> specimenTypes = new HashSet<SpecimenType>();

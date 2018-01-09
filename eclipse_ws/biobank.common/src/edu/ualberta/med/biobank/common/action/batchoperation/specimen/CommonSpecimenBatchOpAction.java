@@ -48,7 +48,7 @@ public abstract class CommonSpecimenBatchOpAction<T extends IBatchOpSpecimenInpu
                                        File inputFile)
         throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
         super(workingCenter, compressedList, inputFile);
-    }
+        }
 
     /*
      * Returns a list of studies that existing specimens and patients in the pojo data belong to.
@@ -63,8 +63,8 @@ public abstract class CommonSpecimenBatchOpAction<T extends IBatchOpSpecimenInpu
             Patient patient = BatchOpActionUtil.getPatient(context.getSession(), pnumber);
             if (patient != null) {
                 existingPatients.add(patient);
-            }
         }
+    }
 
         for (Patient patient : existingPatients) {
             studies.add(patient.getStudy());
@@ -115,7 +115,7 @@ public abstract class CommonSpecimenBatchOpAction<T extends IBatchOpSpecimenInpu
 
         if (currentCenter == null) {
             currentCenter = originInfo.getCenter();
-        }
+            }
 
         specimen.setInventoryId(inventoryId);
         specimen.setSpecimenType(specimenType);

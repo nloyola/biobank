@@ -63,6 +63,7 @@
     <java classname="edu.ualberta.med.biobank.tools.testconfig.TestConfigCreate"
 	  fork="true">
       <sysproperty key="db.properties" value="db.properties"/>
+      <!--arg value="-h"/-->
       <classpath refid="tools.run.classpath" />
       <arg value="--aliquots" if:true="${configTypeAliquots}" />
       <arg value="--grandchild" if:true="${configTypeGrandchild}" />
