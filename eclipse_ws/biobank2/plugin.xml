@@ -1943,11 +1943,11 @@
         name="%SpecimenAssign.editor">
 </editor>
 <editor
-  class="edu.ualberta.med.biobank.forms.ResearchGroupEntryForm"
-  default="false"
-  icon="icons/research_group.png"
-  id="edu.ualberta.med.biobank.forms.ResearchGroupEntryForm"
-  name="%ResearchGroupEntry.editor">
+      class="edu.ualberta.med.biobank.forms.ResearchGroupEntryForm"
+      default="false"
+      icon="icons/research_group.png"
+      id="edu.ualberta.med.biobank.forms.ResearchGroupEntryForm"
+      name="%ResearchGroupEntry.editor">
 </editor>
 <editor
       class="edu.ualberta.med.biobank.forms.ResearchGroupViewForm"

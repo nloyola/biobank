@@ -292,12 +292,12 @@ public class SpecimenViewForm extends BiobankViewForm {
         openBatchOpButton.addListener(SWT.MouseUp, new Listener() {
             @Override
             public void handleEvent(Event event) {
-                try {
+                    try {
                     SpecimenMultipleBatchOpViewForm.openForm(specimenBriefInfo, true);
-                } catch (PartInitException e) {
-                    throw new RuntimeException(e);
+                    } catch (PartInitException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
         });
     }
 

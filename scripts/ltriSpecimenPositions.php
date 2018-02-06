@@ -84,26 +84,26 @@ function getNewOutputfile($outdir, $count) {
 function convertAndGenerate($csvname, $outdir) {
   global $discardedSpecimens;
 
-  $handle = fopen($csvname, "r");
-  if ($handle === FALSE) {
-    echo "cannot open CSV file {$csvname}";
-    return;
-  }
+    $handle = fopen($csvname, "r");
+    if ($handle === FALSE) {
+      echo "cannot open CSV file {$csvname}";
+      return;
+    }
 
-  $header = [
-    "inventoryId",
-    "currentPalletLabel",
-    "palletProductBarcode",
-    "rootContainerType",
-    "palletLabel",
-    "palletPosition",
-    "comment"
-  ];
+    $header = [
+      "inventoryId",
+      "currentPalletLabel",
+      "palletProductBarcode",
+      "rootContainerType",
+      "palletLabel",
+      "palletPosition",
+      "comment"
+    ];
 
-  $rowCount = 0;
-  $outfilecount = 1;
-  $outhandle = getNewOutputfile($outdir, $outfilecount);
-  while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+    $rowCount = 0;
+    $outfilecount = 1;
+    $outhandle = getNewOutputfile($outdir, $outfilecount);
+    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
     if ($rowCount === 0) {
       fputcsv($outhandle, $header);
       $rowCount++;
@@ -117,14 +117,14 @@ function convertAndGenerate($csvname, $outdir) {
     }
 
     fputcsv($outhandle, [ $inventoryId, "", $data[6], "", "", $data[0], "" ], ",", "\"");
-    $rowCount++;
-    if (($rowCount % 1000) === 0) {
-      $outfilecount++;
-      $outhandle = getNewOutputfile($outdir, $outfilecount);
-      fputcsv($outhandle, $header);
+      $rowCount++;
+      if (($rowCount % 1000) === 0) {
+        $outfilecount++;
+        $outhandle = getNewOutputfile($outdir, $outfilecount);
+        fputcsv($outhandle, $header);
+      }
     }
-  }
-  fclose($handle);
+    fclose($handle);
 }
 
 convertAndGenerate($csvname, $outdir);
