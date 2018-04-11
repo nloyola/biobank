@@ -146,7 +146,7 @@ public class TestRequest extends TestAction {
                                                      Arrays.asList(study.getId().toString()),
                                                      site.getId())).getId();
                 break;
-            }
+        }
 
             case NO_STUDY_NO_SITE: {
                 reqId = exec(new RequestSubmitAction(researchGroup.getId(), specimenIds)).getId();

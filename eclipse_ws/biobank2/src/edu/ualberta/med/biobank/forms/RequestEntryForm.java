@@ -173,18 +173,18 @@ public class RequestEntryForm extends BiobankViewForm {
         s2.setClient(dispatchCreation);
 
         addSectionToolbar(s2, i18n.tr("New dispatch"),
-	            new SelectionAdapter() {
-	                @Override
-	                public void widgetSelected(SelectionEvent e) {
-	                    try {
-	                        buildNewDispatch();
-	                    } catch (Exception e1) {
-	                        BgcPlugin.openAsyncError(
-	                            i18n.tr("Error adding dispatch"),
-	                            e1);
-	                    }
-	                }
-	            });
+            new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    try {
+                        buildNewDispatch();
+                    } catch (Exception e1) {
+                        BgcPlugin.openAsyncError(
+                            i18n.tr("Error adding dispatch"),
+                            e1);
+                    }
+                }
+            });
         //Show "Add New" Dispatch tool bar only if no dispatches exist
         if(request.getDispatchCollection(false) != null && request.getDispatchCollection(false).isEmpty()) {
 		s2.getTextClient().setVisible(true);
@@ -317,8 +317,8 @@ public class RequestEntryForm extends BiobankViewForm {
 		 (request.getDispatchCollection(false) != null && request.getDispatchCollection(false).size() > 0 && request.getDispatchCollection(false).get(0).getState().equals(DispatchState.CREATION)) )
         {
 	        dispatchTable.sendDispatchListener(new IInfoTableEditItemListener<DispatchWrapper>() {
-			@Override
-			public void editItem(InfoTableEvent<DispatchWrapper> event) {
+                @Override
+                public void editItem(InfoTableEvent<DispatchWrapper> event) {
 				DispatchWrapper d = ((DispatchWrapper) ((InfoTableSelection) event.getSelection()).getObject());
 				if(d.getDispatchSpecimenCollection(false).size() != request.getRequestSpecimenCollection(false).size()) {
 					MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), i18n.tr("Incomplete Dispatch"), i18n.tr("Dispatch should contain all the requested specimens before sending." ));
@@ -334,8 +334,8 @@ public class RequestEntryForm extends BiobankViewForm {
 						SpecimenTransitView.getCurrent().reload();
 					}
 				}
-			}
-	        });
+                }
+            });
         }
         dispatchTable.addSelectionListener(new SelectionListener() {
             @Override
@@ -597,7 +597,7 @@ public class RequestEntryForm extends BiobankViewForm {
 		LOG.error("Error when seding dispatch from Request");
 		e.printStackTrace();
 	}
-	}
+    }
 
     @Override
     public void setValues() throws Exception {

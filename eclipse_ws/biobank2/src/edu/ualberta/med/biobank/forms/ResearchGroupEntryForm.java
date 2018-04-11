@@ -121,8 +121,8 @@ public class ResearchGroupEntryForm extends AddressEntryFormCommon {
     @Override
     protected void init() throws Exception {
         Assert.isTrue((adapter instanceof ResearchGroupAdapter),
-                      "Invalid editor input: object of type "
-                      + adapter.getClass().getName());
+            "Invalid editor input: object of type "
+                + adapter.getClass().getName());
         researchGroupAdapter = (ResearchGroupAdapter) adapter;
 
         setRgInfo(adapter.getId());
@@ -132,7 +132,7 @@ public class ResearchGroupEntryForm extends AddressEntryFormCommon {
             tabName = i18n.tr("New Research Group");
         } else
             tabName = i18n.tr("Research Group {0}",
-                              researchGroup.getNameShort());
+                researchGroup.getNameShort());
         setPartName(tabName);
 
         //OHSDEV
@@ -187,30 +187,30 @@ public class ResearchGroupEntryForm extends AddressEntryFormCommon {
         toolkit.paintBordersFor(client);
 
         setFirstControl(createBoundWidgetWithLabel(client, BgcBaseText.class,
-                                                   SWT.NONE, HasName.PropertyName.NAME.toString(), null,
-                                                   researchGroup,
-                                                   ResearchGroupPeer.NAME.getName(), new NonEmptyStringValidator(
-                                                       MSG_NO_RG_NAME)));
+            SWT.NONE, HasName.PropertyName.NAME.toString(), null,
+            researchGroup,
+            ResearchGroupPeer.NAME.getName(), new NonEmptyStringValidator(
+                MSG_NO_RG_NAME)));
 
         createBoundWidgetWithLabel(client, BgcBaseText.class, SWT.NONE,
-                                   HasNameShort.PropertyName.NAME_SHORT.toString(), null,
-                                   researchGroup,
-                                   ResearchGroupPeer.NAME_SHORT.getName(),
-                                   new NonEmptyStringValidator(MSG_NO_RG_NAME_SHORT));
+            HasNameShort.PropertyName.NAME_SHORT.toString(), null,
+            researchGroup,
+            ResearchGroupPeer.NAME_SHORT.getName(),
+            new NonEmptyStringValidator(MSG_NO_RG_NAME_SHORT));
 
         toolkit.paintBordersFor(client);
 
         activityStatusComboViewer = createComboViewer(client,
-                                                      ActivityStatus.NAME.singular().toString(),
-                                                      ActivityStatus.valuesList(), researchGroup.getActivityStatus(),
-                                                      i18n.tr("Research Group must have an activity status"),
-                                                      new ComboSelectionUpdate() {
-                                                          @Override
-                                                          public void doSelection(Object selectedObject) {
-                                                              researchGroup
-                                                                  .setActivityStatus((ActivityStatus) selectedObject);
-                                                          }
-                                                      });
+            ActivityStatus.NAME.singular().toString(),
+            ActivityStatus.valuesList(), researchGroup.getActivityStatus(),
+            i18n.tr("Research Group must have an activity status"),
+            new ComboSelectionUpdate() {
+                @Override
+                public void doSelection(Object selectedObject) {
+                    researchGroup
+                        .setActivityStatus((ActivityStatus) selectedObject);
+                }
+            });
 
         createCommentSection();
 
@@ -224,7 +224,7 @@ public class ResearchGroupEntryForm extends AddressEntryFormCommon {
 
         client.setLayout(gl);
         commentEntryTable = new CommentsInfoTable(client,
-                                                  researchGroup.getCommentCollection(false));
+            researchGroup.getCommentCollection(false));
         GridData gd = new GridData();
         gd.horizontalSpan = 2;
         gd.grabExcessHorizontalSpace = true;
@@ -232,8 +232,8 @@ public class ResearchGroupEntryForm extends AddressEntryFormCommon {
         commentEntryTable.setLayoutData(gd);
         commentWidget =
             (BgcBaseText) createBoundWidgetWithLabel(client, BgcBaseText.class,
-                                                     SWT.MULTI,
-                                                     i18n.tr("Add a comment"), null, comment, "message", null);
+                SWT.MULTI,
+                i18n.tr("Add a comment"), null, comment, "message", null);
 
     }
 
@@ -264,7 +264,7 @@ public class ResearchGroupEntryForm extends AddressEntryFormCommon {
         if (superAdmin) {
             addSectionToolbar(section, i18n.tr("Add Study "),
                               new SelectionAdapter() {
-                                  @Override
+    @Override
                                   public void widgetSelected(SelectionEvent e) {
                                       studiesTable.createStudyDlg();
                                   }
@@ -303,7 +303,7 @@ public class ResearchGroupEntryForm extends AddressEntryFormCommon {
     @Override
     public void saveForm() throws Exception
         {
-            AddressSaveInfo addressInfo =
+        AddressSaveInfo addressInfo =
                 new AddressSaveInfo(
                     researchGroup.getAddress().getId(),
                     researchGroup.getAddress().getStreet1(),
@@ -342,7 +342,7 @@ public class ResearchGroupEntryForm extends AddressEntryFormCommon {
 
             ((AdapterBase) adapter).setModelObject(researchGroup);
             researchGroupAdapter.getParent().performExpand();
-        }
+    }
 
     @Override
     protected void doAfterSave() throws Exception {

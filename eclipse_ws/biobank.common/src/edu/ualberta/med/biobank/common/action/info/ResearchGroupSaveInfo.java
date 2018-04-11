@@ -8,8 +8,8 @@ import edu.ualberta.med.biobank.model.ActivityStatus;
 import edu.ualberta.med.biobank.model.ResearchGroup;
 import edu.ualberta.med.biobank.model.Study;
 
-/**
- *
+    /**
+     * 
  * Data object that holds the Research Group information when
  * the Research Group is being saved.
  *
@@ -21,7 +21,7 @@ import edu.ualberta.med.biobank.model.Study;
  *
  * @author OHSDEV
  *
- */
+     */
 public class ResearchGroupSaveInfo implements ActionResult
 {
     private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class ResearchGroupSaveInfo implements ActionResult
     public String comment;
     public AddressSaveInfo address;
     public ActivityStatus activityStatus;
-
+    
     public ResearchGroupSaveInfo(Integer id,
                                  String name,
                                  String nameShort,
@@ -41,14 +41,14 @@ public class ResearchGroupSaveInfo implements ActionResult
                                  AddressSaveInfo address,
                                  ActivityStatus activityStatus) {
         this.id = id;
-        this.name = name;
-        this.nameShort = nameShort;
+        this.name=name;
+        this.nameShort=nameShort;
         this.studyIds = new HashSet<>(studyIds);
-        this.comment = comment;
-        this.address = address;
-        this.activityStatus = activityStatus;
+        this.comment=comment;
+        this.address=address;
+        this.activityStatus=activityStatus;
     }
-
+    
     public static ResearchGroupSaveInfo createFromResearchGroup(ResearchGroup rg) {
         Set<Integer> studyIds = new HashSet<>(0);
         for (Study study : rg.getStudies()) {

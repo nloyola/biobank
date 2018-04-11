@@ -928,15 +928,13 @@ ul
 <p class=MsoNormal>1. Set up Tomcat Location in <span class=SpellE>build.properies</span>:
 <span class=SpellE>tomcat.server.location</span><o:p></o:p></p>
 
-<p class=MsoNormal>2. Under the biobank directory, run command: ant <o:p></o:p></p>
+<p class=MsoNormal>2. Under the biobank directory, run command: ant <span
+class=SpellE>init</span><span style='mso-spacerun:yes'>\A0 </span><o:p></o:p></p>
 
-<p class=MsoNormal>3. Under the biobank directory, run command: ant <span
-class=SpellE>init</span><span style='mso-spacerun:yes'>  </span><o:p></o:p></p>
-
-<p class=MsoNormal>4. Modify <span class=SpellE>db.properties</span> file accordingly
+<p class=MsoNormal>3. Modify <span class=SpellE>db.properties</span> file accordingly
 <o:p></o:p></p>
 
-<p class=MsoNormal>5. Under the biobank directory, run command: ant <span
+<p class=MsoNormal>4. Under the biobank directory, run command: ant <span
 class=SpellE>deploy_tomcat</span><o:p></o:p></p>
 
 <p class=MsoNormal>Make sure that the following files are located in the &lt;<span
@@ -946,44 +944,42 @@ class=SpellE>tomcat_dir</span>&gt;/<span class=SpellE>conf</span> directory: </p
 <span class=SpellE>catalina.properties</span>, <span class=SpellE>login.config</span>
 and Catalina/localhost/biobank.xml are under <o:p></o:p></p>
 
-<p class=MsoNormal>6. Start Tomcat<o:p></o:p></p>
+<p class=MsoNormal>5. Start Tomcat<o:p></o:p></p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 
 <p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Build the Biobank Client<o:p></o:p></b></p>
 
-<p class=MsoNormal>1. Modify MANIFEST.MF in submodules labelPrinter and scannerConfig. Change there JavaSE-1.<b>6</b> to JavaSE-1.<b>7</b> . <o:p></o:p></p>
-
-<p class=MsoNormal>2. Under biobank directory, run command: ant product<o:p></o:p></p>
+<p class=MsoNormal>1. Under biobank directory, run command: ant product<o:p></o:p></p>
 
 <p class=MsoNormal><u>Important Notes: <o:p></o:p></u></p>
 
 <p class=MsoListParagraphCxSpFirst style='text-indent:-.25in;mso-list:l0 level1 lfo1'><![if !supportLists]><span
 style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Symbol'><span style='mso-list:Ignore'>\B7<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]>Tomcat 8.5.X is designed to run on Java SE 7 and
 later.<o:p></o:p></p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l0 level1 lfo1'><![if !supportLists]><span
 style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Symbol'><span style='mso-list:Ignore'>\B7<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]>Currently the Biobank client is built and tested
 on Java 7. <o:p></o:p></p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l0 level1 lfo1'><![if !supportLists]><span
 style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Symbol'><span style='mso-list:Ignore'>\B7<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]>Biobank client compilation is failing with
 Eclipse Indigo RCP and Java 8<o:p></o:p></p>
 
 <p class=MsoListParagraphCxSpLast style='text-indent:-.25in;mso-list:l0 level1 lfo1'><![if !supportLists]><span
 style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Symbol'><span style='mso-list:Ignore'>\B7<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span></span><![endif]>Biobank client compilation was successful Eclipse
 Luna RCP and Java 8. With this technology stack the functional regression
-testing was not yet conducted.<span style='mso-spacerun:yes'>       </span><o:p></o:p></p>
+testing was not yet conducted.<span style='mso-spacerun:yes'>\A0\A0\A0\A0\A0\A0 </span><o:p></o:p></p>
 
-<p class=MsoNormal><span style='mso-spacerun:yes'> </span><o:p></o:p></p>
+<p class=MsoNormal><span style='mso-spacerun:yes'>\A0</span><o:p></o:p></p>
 
 <p class=MsoNormal><o:p>&nbsp;</o:p></p>
 

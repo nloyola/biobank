@@ -15,8 +15,8 @@ import edu.ualberta.med.biobank.model.Comment;
 import edu.ualberta.med.biobank.model.ResearchGroup;
 import edu.ualberta.med.biobank.model.Study;
 
-/**
- *
+    /**
+     * 
  * Action object that saves a Research Group along with it's associated studies to the database
  *
  * Code Changes -
@@ -25,7 +25,7 @@ import edu.ualberta.med.biobank.model.Study;
  *
  * @author OHSDEV
  *
- */
+     */
 public class ResearchGroupSaveAction implements Action<IdResult> {
 
     private static final long serialVersionUID = 1L;
@@ -55,6 +55,8 @@ public class ResearchGroupSaveAction implements Action<IdResult> {
 
         rg.setName(rgInfo.name);
         rg.setNameShort(rgInfo.nameShort);
+
+        rg.setStudy(context.get(Study.class, rgInfo.studyId));
         rg.setActivityStatus(rgInfo.activityStatus);
 
         //OHSDEV
