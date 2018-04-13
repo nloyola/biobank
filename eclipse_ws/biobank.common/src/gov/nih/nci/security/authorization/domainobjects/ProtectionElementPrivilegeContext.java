@@ -8,19 +8,19 @@ import edu.ualberta.med.biobank.server.applicationservice.BiobankApplicationServ
  * Copy of original class from CSM4.1 There are bugs in the hashCode, compareTo
  * and equals methods that are solved here. This class is supposed to be the one
  * taken by the classloader of the war file.
- * 
+ *
  * The correction code has been copied from the CSM4.2 source class. TODO: can
  * we use CSM4.2 without any problem ? Do we need migration for that ?
- * 
+ *
  * @see BiobankApplicationServiceImpl
- * 
+ *
  */
 @SuppressWarnings("rawtypes")
 public class ProtectionElementPrivilegeContext implements Comparable,
     Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1284454348966855754L;
     /**
@@ -47,9 +47,9 @@ public class ProtectionElementPrivilegeContext implements Comparable,
 
     /**
      * Collection of privileges for this protection element
-     * 
+     *
      * @param newVal
-     * 
+     *
      */
     public void setPrivileges(java.util.Set newVal) {
         privileges = newVal;
@@ -64,9 +64,9 @@ public class ProtectionElementPrivilegeContext implements Comparable,
 
     /**
      * The protection element for which privileges are assigned.
-     * 
+     *
      * @param newVal
-     * 
+     *
      */
     public void setProtectionElement(ProtectionElement newVal) {
         protectionElement = newVal;
@@ -77,9 +77,6 @@ public class ProtectionElementPrivilegeContext implements Comparable,
         if (obj instanceof ProtectionElementPrivilegeContext) {
             ProtectionElementPrivilegeContext other =
                 (ProtectionElementPrivilegeContext) obj;
-            if (null == this) {
-                return false;
-            }
             if (null == other.getProtectionElement()
                 || null == this.getProtectionElement()) {
                 return false;

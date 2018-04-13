@@ -51,7 +51,6 @@ public class ResearchGroupAdapter extends AdapterBase {
     @SuppressWarnings("nls")
     @Override
     protected String getLabelInternal() {
-
         ResearchGroupWrapper rg = (ResearchGroupWrapper) getModelObject();
         Assert.isNotNull(rg, "ResearchGroup is null");
         return rg.getNameShort();

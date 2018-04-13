@@ -91,8 +91,20 @@ public class SpecimenTreeViewAdapter extends SpecimenAdapter {
 	return specimenInfos;
 
     }
+<<<<<<< HEAD
+
+<<<<<<< HEAD
+    @SuppressWarnings("nls")
+=======
+=======
+<<<<<<< HEAD
+
+=======
 
     @SuppressWarnings("nls")
+>>>>>>> wip: moving to Eclipse Oxygen
+>>>>>>> b04c09b2d... wip: moving to Eclipse Oxygen
+>>>>>>> wip: moving to Eclipse Oxygen
     @Override
 
     public void addChild(AbstractAdapterBase child) {
@@ -114,12 +126,23 @@ public class SpecimenTreeViewAdapter extends SpecimenAdapter {
     @Override
     public List<AbstractAdapterBase> search(Class<?> searchedClass,
         Integer objectId) {
+<<<<<<< HEAD
 	this.loadChildren(true);
 	if (!this.hasChildren())
 		return null;
 	// parameters are not used since search is internally
 
 	List<AbstractAdapterBase> specimenAdapters = this.getChildren();
+=======
+	this.loadChildren(true);
+	if (!this.hasChildren())
+		return null;
+<<<<<<< HEAD
+	// parameters are not used since search is internally
+=======
+	// parameters are not used since search is internally
+>>>>>>> wip: moving to Eclipse Oxygen
+>>>>>>> b04c09b2d... wip: moving to Eclipse Oxygen
 
         for (AbstractAdapterBase adapter: specimenAdapters ){
 		adapter.search(searchedClass, adapter.getId());

@@ -9,12 +9,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 import edu.ualberta.med.biobank.model.FileData;
 import edu.ualberta.med.biobank.test.TestDb;
+import junit.framework.Assert;
 
 public class TestFileData extends TestDb {
     @Test
@@ -34,10 +33,8 @@ public class TestFileData extends TestDb {
         out.write(data.getBytes());
         out.close();
 
-        Assert.assertTrue(
-            isContentEqual(
-                new FileInputStream(original),
-                new FileInputStream(copy)));
+        Assert.assertTrue(isContentEqual(new FileInputStream(original),
+                                         new FileInputStream(copy)));
     }
 
     @Test

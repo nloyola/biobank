@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.eclipse.nebula.widgets.cdatetime.CDT;
+import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -18,16 +20,14 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 import edu.ualberta.med.biobank.common.formatters.DateFormatter;
-import edu.ualberta.med.biobank.gui.common.widgets.nebula.CDT;
-import edu.ualberta.med.biobank.gui.common.widgets.nebula.CDateTime;
 
 public class DateTimeWidget extends BgcBaseWidget {
 
-    private CDateTime dateEntry;
+    private final CDateTime dateEntry;
 
-    private List<ModifyListener> modifyListeners = new ArrayList<ModifyListener>();
+    private final List<ModifyListener> modifyListeners = new ArrayList<ModifyListener>();
 
-    private Listener dataEntryModifyListener = new Listener() {
+    private final Listener dataEntryModifyListener = new Listener() {
         @Override
         public void handleEvent(Event event) {
             if ((event.type == SWT.Modify) || (event.type == SWT.Selection)) {
@@ -36,7 +36,7 @@ public class DateTimeWidget extends BgcBaseWidget {
         }
     };
 
-    private TimeZone timeZone;
+    private final TimeZone timeZone;
 
     private boolean zeroOutTime = false;
 

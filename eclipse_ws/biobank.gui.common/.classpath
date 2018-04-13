@@ -11,5 +11,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/commons-io.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/DynamicJasper.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/itext.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.nebula.widgets.cdatetime_1.3.0.201804011600.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.nebula.cwt_1.1.0.201804011600.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
