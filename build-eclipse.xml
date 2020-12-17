@@ -164,7 +164,7 @@ use command "ant -projecthelp" to display the targets.
   </target>
 
   <target name="eclipse-biobank"
-	  depends="resolve,eclipse-biobank-common,eclipse-biobank-gui-common,eclipse-biobank-mvp,eclipse-scanner-config">
+	  depends="eclipse-biobank-common,eclipse-biobank-gui-common,eclipse-biobank-mvp,eclipse-scanner-config">
     <javac
 	compiler="org.eclipse.jdt.core.JDTCompilerAdapter"
 	includeantruntime="false"

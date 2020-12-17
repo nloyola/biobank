@@ -5,14 +5,15 @@
   <property name="bundle" value="i18n.Messages" />
   <property name="po.dir" value="po" />
   <property name="po.output.dir" value="${lib.dir}" />
-  <property name="gettexttasks.jar" value="${req.jars.dir}/build/gettext-ant-tasks.jar"/>
+  <property name="gettexttasks.jar"
+            value="${req.jars.dir}/gettext-ant-tasks-0.9.7.jar"/>
 
   <target name="init.dir">
     <mkdir dir="${po.dir}" />
     <mkdir dir="${po.output.dir}" />
   </target>
 
-  <target name="init.gettext" description="Loads the Ant gettext tasks" depends="resolve">
+  <target name="init.gettext" description="Loads the Ant gettext tasks">
     <taskdef name="gettext-extract"
              classname="org.xnap.commons.ant.gettext.GettextExtractKeysTask"
              classpath="${gettexttasks.jar}"/>

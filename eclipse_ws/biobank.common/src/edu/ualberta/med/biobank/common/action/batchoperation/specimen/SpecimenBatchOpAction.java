@@ -44,9 +44,9 @@ import edu.ualberta.med.biobank.util.CompressedReference;
 /**
  * This action takes a list of Specimen Batch Operation beans as input, verifies that the data is
  * valid, and if valid saves the data to the database.
- * 
+ *
  * @author Nelson Loyola
- * 
+ *
  */
 @SuppressWarnings("nls")
 public class SpecimenBatchOpAction implements Action<IdResult> {
