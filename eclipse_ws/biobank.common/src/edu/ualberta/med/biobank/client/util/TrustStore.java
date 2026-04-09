@@ -116,6 +116,7 @@ public final class TrustStore {
             int port = (url.getPort() != -1) ? url.getPort() : 443;
 
             SSLSocket socket = (SSLSocket) factory.createSocket(host, port);
+            socket.setEnabledProtocols(new String[] { "TLSv1.2" }); //$NON-NLS-1$
             socket.setSoTimeout(5000);
 
             try {

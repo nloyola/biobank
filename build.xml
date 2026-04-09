@@ -404,6 +404,40 @@
           tofile="${secu-log.dir}/tomcat/biobank.keystore"  overwrite="true" />
   </target>
 
+  <target name="nginx-cert-gen"
+          description="Generate a self-signed TLS certificate for Nginx with proper SAN support">
+    <hostinfo prefix="local" />
+
+    <echo message="Generating a self-signed Nginx TLS certificate..." />
+    <input message="Enter CN (hostname or IP users connect to):"
+           addproperty="dName.CN"
+           defaultValue="${local.ADDR4}" />
+    <input message="Enter subjectAltName:"
+           addproperty="subjectAltName"
+           defaultValue="IP:${local.ADDR4},DNS:localhost" />
+
+    <delete file="scripts/ssl/cert.cnf" quiet="true" />
+    <copy file="scripts/ssl/cert.cnf.template"
+          tofile="scripts/ssl/cert.cnf" overwrite="true" />
+    <replace file="scripts/ssl/cert.cnf">
+      <replacefilter token="@@dName.CN@@" value="${dName.CN}" />
+      <replacefilter token="@@subjectAltName@@" value="${subjectAltName}" />
+    </replace>
+
+    <exec executable="openssl" dir="scripts/ssl">
+      <arg line="req -newkey rsa:2048 -x509 -days 3650 -config cert.cnf -keyout key.pem -out cert.pem" />
+    </exec>
+
+    <delete file="docker/nginx-selfsigned.crt" quiet="true" />
+    <delete file="docker/nginx-selfsigned.key" quiet="true" />
+    <copy file="scripts/ssl/cert.pem" tofile="docker/nginx-selfsigned.crt" />
+    <copy file="scripts/ssl/key.pem"  tofile="docker/nginx-selfsigned.key" />
+
+    <echo message="Certificate written to docker/nginx-selfsigned.crt" />
+    <echo message="Key written to docker/nginx-selfsigned.key" />
+    <echo message="Restart Nginx to pick up the new certificate." />
+  </target>
+
   <target name="keystore-check">
     <available file="${secu-log.dir}/tomcat/biobank.keystore" property="keystore.available" />
   </target>

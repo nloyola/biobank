@@ -5,7 +5,7 @@ Biobank is a Java client-server application for the Canadian BioSample Repositor
 ## Critical Constraints
 
 - **Java 1.7 required.** The build targets Java 1.7 (`ant.build.javac.target=1.7`). Do not upgrade the Java version without verifying Tomcat compatibility.
-- **Legacy TLS required.** Nginx proxies to Tomcat using TLS 1.0 (`proxy_ssl_protocols TLSv1`). Do not modernize the SSL/TLS proxy configuration without testing client compatibility.
+- **HTTPS required.** The thick client connects over HTTPS. Nginx terminates SSL using TLS 1.2/1.3 and proxies to Tomcat over plain HTTP.
 
 ## Project Structure
 

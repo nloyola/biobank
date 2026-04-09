@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><?pde version="3.5"?><product name="BioBank" id="biobank.product" application="biobank.biobank" version="3.12.1" useFeatures="true" includeLaunchers="true">
-
-   <aboutInfo>
-      <image path="/biobank2/icons/about.png"/>
-      <text>
+           
+    
+    <aboutInfo>
+                      
+        
+        <image path="/biobank2/icons/about.png"/>
+                      
+        
+        <text>
          BioBank Client
 Version {0}
 
@@ -11,39 +16,84 @@ Developed for the Canadian BioSample Repository by AICML .
 Canadian BioSample Repository: http://www.biosample.ca
 AICML: http://aicml.cs.ualberta.ca
       </text>
-   </aboutInfo>
-
-   <configIni use="default">
+                   
+    
+    </aboutInfo>
+           
+    
+    <configIni use="default">
    </configIni>
-
-   <launcherArgs>
-      <programArgs>-data @user.home/biobank2</programArgs>
-      <programArgsLin>--launcher.GTK_version 2</programArgsLin>
-      <vmArgs>-Dosgi.requiredJavaVersion=1.7 -Dhttps.protocols=TLSv1.2 -XX:MaxPermSize=256m -Xms512m -Xmx1024m</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
-   </launcherArgs>
-
-   <windowImages/>
-
-   <splash location="biobank"/>
-   <launcher name="BioBank">
-      <linux icon="/biobank2/icons/biobank_launcher.xpm"/>
-      <macosx icon="/biobank2/icons/biobank_launcher.icns"/>
-      <solaris/>
-      <win useIco="false">
-         <bmp winSmallHigh="/biobank.gui.common/icons/biobank_launcher_16.bmp" winMediumHigh="/biobank.gui.common/icons/biobank_launcher_32.bmp"/>
-      </win>
-   </launcher>
-
-
-   <vm>
-      <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</linux>
-      <macos include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</macos>
-      <solaris include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</solaris>
-      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</windows>
-   </vm>
-
-   <license>
+           
+    
+    <launcherArgs>
+                      
+        
+        <programArgs>-data @user.home/biobank2</programArgs>
+                      
+        
+        <programArgsLin>--launcher.GTK_version 2</programArgsLin>
+                      
+        
+        <vmArgs>-Dosgi.requiredJavaVersion=1.7 -Dhttps.protocols=TLSv1.2 -XX:MaxPermSize=256m -Xms512m -Xmx1024m</vmArgs>
+                      
+        
+        <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+                   
+    
+    </launcherArgs>
+           
+    
+    <windowImages/>
+           
+    
+    <splash location="biobank"/>
+           
+    
+    <launcher name="BioBank">
+                      
+        
+        <linux icon="/biobank2/icons/biobank_launcher.xpm"/>
+                      
+        
+        <macosx icon="/biobank2/icons/biobank_launcher.icns"/>
+                      
+        
+        <solaris/>
+                      
+        
+        <win useIco="false">
+                                 
+            
+            <bmp winSmallHigh="/biobank.gui.common/icons/biobank_launcher_16.bmp" winMediumHigh="/biobank.gui.common/icons/biobank_launcher_32.bmp"/>
+                              
+        
+        </win>
+                   
+    
+    </launcher>
+           
+    
+    <vm>
+                      
+        
+        <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</linux>
+                      
+        
+        <macos include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</macos>
+                      
+        
+        <solaris include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</solaris>
+                      
+        
+        <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</windows>
+                   
+    
+    </vm>
+           
+    
+    <license>
+                        
+        
         <text>
    Copyright 2018 Canadian BioSample Repository. All rights reserved.
 
@@ -72,26 +122,58 @@ The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the Canadian BioSample Repository.
          </text>
-   </license>
-
-   <plugins>
+                   
+    
+    </license>
+           
+    
+    <plugins>
    </plugins>
-
-   <features>
-      <feature id="biobank2.feature.core"/>
-      <feature id="biobank2.feature.platform"/>
-      <feature id="org.eclipse.equinox.p2.rcp.feature"/>
-      <feature id="org.eclipse.rcp"/>
-   </features>
-
-   <configurations>
-      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4"/>
-      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2"/>
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2"/>
-      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1"/>
-      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1"/>
-      <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="1"/>
-      <property name="org.eclipse.update.reconcile" value="false"/>
-   </configurations>
+           
+    
+    <features>
+                      
+        
+        <feature id="biobank2.feature.core"/>
+                      
+        
+        <feature id="biobank2.feature.platform"/>
+                      
+        
+        <feature id="org.eclipse.equinox.p2.rcp.feature"/>
+                      
+        
+        <feature id="org.eclipse.rcp"/>
+                   
+    
+    </features>
+           
+    
+    <configurations>
+                      
+        
+        <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="4"/>
+                      
+        
+        <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2"/>
+                      
+        
+        <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2"/>
+                      
+        
+        <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1"/>
+                      
+        
+        <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1"/>
+                      
+        
+        <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="1"/>
+                      
+        
+        <property name="org.eclipse.update.reconcile" value="false"/>
+                   
+    
+    </configurations>
+        
 
 </product>

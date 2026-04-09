@@ -6,7 +6,7 @@
 # This definition stops the following lines choking if HOME isn't
 # defined.
 HOME			= .
-RANDFILE		= /dev/urandom
+RANDFILE		= .rnd
 
 # don't ask for input use config file values 
 # NOTE: this changes the format of the distinguished name and attribute section!

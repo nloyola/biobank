@@ -16,7 +16,7 @@
         <module organisation="gettext" resolver="biobank-maven-repo"/>
 	<module organisation="jsse" resolver="biobank-maven-repo" />
 	<module organisation="supercsv" resolver="biobank-maven-repo" />
-        <module organisation="com.pietschy.gwt" resolver="maven.pietschy.com"/>
+        <module organisation="com.pietschy.gwt" resolver="biobank-maven-repo"/>
         <module organisation="net.sf" name="jargs" resolver="jboss-thirdparty-releases"/>
     </modules>
 </ivysettings>
