@@ -1,0 +1,144 @@
+<project name="Build specific targets and properties" default="noDefault">
+
+	<!-- ===================================================================== -->
+	<!-- Run a given ${target} on all elements being built -->
+	<!-- ===================================================================== -->
+	<available property="allElementsFile" file="${builder}/allElements.xml" value="${builder}/allElements.xml"/>
+	<property name="allElementsFile" location="${eclipse.pdebuild.templates}/headless-build/allElements.xml"/>
+
+	<import file="${allElementsFile}" />
+	<target name="allElements">
+		<antcall target="allElementsDelegator" />
+	</target>
+
+	<target name="getBaseComponents" depends="checkLocalBase" unless="skipBase">
+		<get src="${eclipseBaseURL}" dest="${buildDirectory}/../temp-base.zip" />
+		<unzip dest="${base}" overwrite="true" src="${buildDirectory}/../temp-base.zip" />
+	</target>
+
+	<target name="checkLocalBase">
+		<available file="${base}" property="skipBase" />
+	</target>
+
+	<target name="getMapFiles" depends="checkLocalMaps" unless="skipMaps">
+		<property name="mapsCheckoutTag" value="HEAD" />
+		<cvs cvsRoot="${mapsRepo}" package="${mapsRoot}" dest="${buildDirectory}/maps" tag="${mapsCheckoutTag}" />
+	</target>
+
+	<target name="checkLocalMaps">
+		<available property="skipMaps" file="${buildDirectory}/maps" />
+	</target>
+
+	<target name="tagMapFiles" if="tagMaps">
+		<cvs dest="${buildDirectory}/maps/${mapsRoot}" command="tag ${mapsTagTag}" />
+	</target>
+
+	<target name="clean" unless="noclean">
+		<antcall target="allElements">
+			<param name="target" value="cleanElement" />
+		</antcall>
+	</target>
+
+	<target name="gatherLogs">
+		<mkdir dir="${buildDirectory}/${buildLabel}/compilelogs" />
+		<antcall target="allElements">
+			<param name="target" value="gatherLogs" />
+		</antcall>
+		<unzip dest="${buildDirectory}/${buildLabel}/compilelogs" overwrite="true">
+			<fileset dir="${buildDirectory}/features">
+				<include name="**/*.log.zip" />
+			</fileset>
+		</unzip>
+	</target>
+
+	<target name="preSetup">
+	</target>
+
+	<target name="postSetup">
+		<antcall target="getBaseComponents" />
+	</target>
+
+	<target name="preFetch">
+	</target>
+
+	<target name="postFetch">
+	</target>
+
+	<target name="preProcessRepos">
+	</target>
+
+	<target name="postProcessRepos">
+	</target>
+
+	<target name="preGenerate">
+	</target>
+
+	<target name="postGenerate">
+		<!--
+		  ECJ (JDT compiler adapter) fails to resolve the SWT/JFace type hierarchy
+		  for scannerConfig — it reports "missing type Shell" even when SWT JARs are
+		  on the classpath and the access rules file is empty. Standard javac handles
+		  the same classpath correctly.
+
+		  Patch: replace JDTCompilerAdapter with standard javac in the generated
+		  build.xml, and neutralise the JDT-specific compilerarg guards so the
+		  access-rules file and ECJ log args are not forwarded to javac.
+		-->
+		<replace file="${buildDirectory}/plugins/scannerConfig/build.xml"
+			token='value="org.eclipse.jdt.core.JDTCompilerAdapter"'
+			value='value="modern"'/>
+		<replace file="${buildDirectory}/plugins/scannerConfig/build.xml"
+			token='compiler="org.eclipse.jdt.core.JDTCompilerAdapter"'
+			value='compiler="__disabled__"'/>
+
+		<!-- Also empty the access-rules file as a defensive measure -->
+		<delete file="${buildDirectory}/plugins/scannerConfig/javaCompiler...args" quiet="true"/>
+		<touch file="${buildDirectory}/plugins/scannerConfig/javaCompiler...args"/>
+
+		<!--
+		  Remove Eclipse IDE bin/ output directories from all copied plugins.
+		  These may contain class files compiled with a newer JDK than Java 7
+		  (e.g. Java 21 from the developer's local IDE). Standard javac rejects
+		  wrong-version class files with "class file has wrong version X, should be 51.0".
+		  The PDE build uses the @dot directories for compiled output, not bin/.
+		-->
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${buildDirectory}/plugins" includes="*/bin/**" defaultexcludes="false"/>
+		</delete>
+
+		<antcall target="clean" />
+	</target>
+
+	<target name="preProcess">
+	</target>
+
+	<target name="postProcess">
+	</target>
+
+	<target name="preAssemble">
+	</target>
+
+	<target name="postAssemble">
+	</target>
+
+	<target name="prePackage">
+	</target>
+
+	<target name="postPackage">
+	</target>
+
+	<target name="postBuild">
+		<antcall target="gatherLogs" />
+	</target>
+
+	<target name="test">
+	</target>
+
+	<target name="publish">
+	</target>
+
+	<target name="noDefault">
+		<echo message="You must specify a target when invoking this file" />
+	</target>
+
+</project>

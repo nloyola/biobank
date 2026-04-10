@@ -696,6 +696,8 @@
           classname="org.eclipse.equinox.launcher.Main"
           failonerror="true"
           fork="true">
+      <!-- Allow p2 to install unsigned JARs (our compiled plugins are unsigned) -->
+      <jvmarg value="-Declipse.p2.unsignedPolicy=allow"/>
       <arg line="-application org.eclipse.ant.core.antRunner" />
       <arg line="-buildfile ${toString:pde.build.id}" />
       <arg line="-Dbuilder=${product.dir}" />
@@ -704,6 +706,7 @@
       <!-- instead of fixed paths in product/build.properties: -->
       <arg line="-Dproduct=${eclipse.proj.dir}/biobank2.product" />
       <arg line="-DbuildDirectory=${product.dir}/buildDirectory" />
+      <arg line="-DbuildTempFolder=${product.dir}/buildDirectory" />
       <arg line="-DbaseLocation=${env.ECLIPSE_HOME}" />
       <arg line="-Djava.client.version.num=${java.client.version.num}" />
 
@@ -711,11 +714,15 @@
       <!-- arg line="-Dconfigs='win32, win32, x86'" / -->
       <!-- arg line="-Dconfigs='linux, gtk, x86_64'" / -->
     </java>
+    <condition property="buildRepo.exists">
+      <available file="${product.dir}/buildDirectory/buildRepo/features" type="dir" />
+    </condition>
     <antcall target="updateSiteMetadata" />
   </target>
 
 
   <target name="updateSiteMetadata"
+	  if="buildRepo.exists"
 	  description="Build the update site folder">
     <property name="buildDirectory" value="${product.dir}/buildDirectory" />
     <property name="updateSiteFolder" value="${buildDirectory}/updateSite" />

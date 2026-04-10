@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><feature id="biobank2.feature.platform" label="BioBank Platform Feature" version="3.12.1">
-           
-    
+
+
     <license url="http://www.example.com/license">
       [Enter License Description here.]
    </license>
-        
+
+   <plugin id="org.eclipse.ui.views.log" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
 
 </feature>

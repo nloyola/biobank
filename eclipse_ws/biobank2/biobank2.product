@@ -52,10 +52,10 @@ AICML: http://aicml.cs.ualberta.ca
     <launcher name="BioBank">
                       
         
-        <linux icon="/biobank2/icons/biobank_launcher.xpm"/>
-                      
-        
-        <macosx icon="/biobank2/icons/biobank_launcher.icns"/>
+        <linux icon="/biobank.gui.common/icons/biobank_launcher.xpm"/>
+
+
+        <macosx icon="/biobank.gui.common/icons/biobank_launcher.icns"/>
                       
         
         <solaris/>
@@ -141,11 +141,14 @@ either expressed or implied, of the Canadian BioSample Repository.
                       
         
         <feature id="org.eclipse.equinox.p2.rcp.feature"/>
-                      
-        
+
+
         <feature id="org.eclipse.rcp"/>
-                   
-    
+
+
+        <feature id="org.eclipse.platform"/>
+
+
     </features>
            
     

@@ -129,86 +129,12 @@ containers survive a reboot:
 docker compose --env-file .env -f docker/compose.yaml --project-directory docker up --detach
 ```
 
-## Trusting the server certificate on the client machine
-
-The thick client connects over HTTPS. Because the server uses a self-signed
-certificate, each client machine must import that certificate into its JRE
-truststore.
-
-1. Copy `docker/nginx-selfsigned.crt` from the server to the client machine.
-
-2. Import it into the JRE truststore with `keytool`. Adjust `$JAVA_HOME` to
-   your JRE installation path:
-
-    ```sh
-    keytool -import -trustcacerts -alias biobank-server \
-        -file nginx-selfsigned.crt \
-        -keystore $JAVA_HOME/lib/security/cacerts
-    ```
-
-    The default truststore password is `changeit`.
-
-3. Confirm with `yes` when prompted to trust the certificate.
-
-After importing, restart the thick client. It should connect without SSL errors.
-
 ## Redeploying after a code change
 
 With the containers running, exec into the Tomcat container and run Ant:
 
 ```sh
 docker compose --env-file .env -f docker/compose.yaml --project-directory docker exec tomcat ant deploy_tomcat
-```
-
-## Building the thick client
-
-The thick client is an Eclipse RCP application built using a dedicated Docker image that
-provides Java 1.7, Ant, Eclipse 3.7 Indigo Classic (with PDE), and the Eclipse delta pack
-(required for cross-platform builds).
-
-### Build the image (once)
-
-Download the Eclipse 3.7.2 Indigo Classic and delta pack from the Eclipse archive and place
-them in `docker/build-client/`:
-
-- `eclipse-SDK-3.7.2-linux-gtk-x86_64.tar.gz`
-- `eclipse-3.7.2-delta-pack.zip`
-
-Both are available at:
-`https://archive.eclipse.org/eclipse/downloads/drops/R-3.7.2-201202080800/`
-
-Then build the image:
-
-```sh
-cd /opt/biobank/biobank-thick-client
-ln -f docker/apache-ant-1.9.0-bin.tar.bz2 docker/build-client/apache-ant-1.9.0-bin.tar.bz2
-docker build -t biobank-build-client docker/build-client/
-```
-
-### Build the Windows client
-
-```sh
-cd /opt/biobank/biobank-thick-client
-docker run --rm -v $(pwd):/opt/biobank biobank-build-client \
-    ant product -Dconfigs="win32, win32, x86"
-```
-
-The distributable is written to `product/buildDirectory/`.
-
-### Build the Linux client
-
-```sh
-cd /opt/biobank/biobank-thick-client
-docker run --rm -v $(pwd):/opt/biobank biobank-build-client \
-    ant product -Dconfigs="linux, gtk, x86_64"
-```
-
-### Build all platforms
-
-Omit `-Dconfigs` to build for all platforms at once:
-
-```sh
-docker run --rm -v $(pwd):/opt/biobank biobank-build-client ant product
 ```
 
 ## Publishing the image to Docker Hub
