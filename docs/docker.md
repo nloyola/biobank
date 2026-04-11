@@ -137,28 +137,7 @@ With the containers running:
 
 ```sh
 docker compose --env-file .env -f docker/compose.yaml --project-directory docker build --no-cache
-docker push nloyola/biobank:0.1
+docker push nloyola/biobank_v3.12.:0.1
 ```
 
 Replace `nloyola` with your Docker Hub account name and `0.1` with the new version number.
-
-## Cron job
-
-On **biobank-new.cbsr.ualberta.ca** a cron job dumps the database nightly:
-
-```
-05 2 * * * /opt/biobank/biobank_db_backup.sh
-```
-
-The script writes a gzipped SQL file dated by creation date to `/data/dbbackups/`. Database
-credentials are stored in `/home/biobank/.my.cnf`:
-
-```ini
-[mariadb-client]
-user=changeme
-password=changeme
-
-[mariadb-dump]
-user=changeme
-password=changeme
-```

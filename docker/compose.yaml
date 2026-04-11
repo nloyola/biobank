@@ -12,6 +12,7 @@ services:
     db:
         build:
             context: ./db
+            network: host
         image: biobank-db
         command: --default-authentication-plugin=mariadb_native_password --lower-case-table-names=1
         volumes:
