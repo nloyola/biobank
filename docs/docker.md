@@ -126,6 +126,12 @@ On first run, follow the logs to confirm startup before using the application:
 docker compose --env-file .env -f docker/compose.yaml --project-directory docker logs -f
 ```
 
+To check container status:
+
+```sh
+./bb-status.sh
+```
+
 To stop and remove the containers:
 
 ```sh
