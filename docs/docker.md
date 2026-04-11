@@ -34,28 +34,6 @@ A Docker image is available on Docker Hub [here](https://hub.docker.com/reposito
 
     Replace `changeme` with your chosen credentials.
 
-1. Provide the Tomcat and Ant distributions required by the Tomcat Docker image.
-   These are not committed to the repository because of their size.
-
-   Download Apache Tomcat 8.5.30 and extract it into `docker/tomcat/`:
-
-    ```sh
-    curl -O https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.30/bin/apache-tomcat-8.5.30.tar.gz
-    tar -xzf apache-tomcat-8.5.30.tar.gz -C docker/tomcat/
-    rm apache-tomcat-8.5.30.tar.gz
-    ```
-
-   Download Apache Ant 1.9.0 and extract it into `docker/tomcat/`:
-
-    ```sh
-    curl -O https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.0-bin.tar.gz
-    tar -xzf apache-ant-1.9.0-bin.tar.gz -C docker/tomcat/
-    rm apache-ant-1.9.0-bin.tar.gz
-    ```
-
-   After this, `docker/tomcat/` should contain `apache-tomcat-8.5.30/` and
-   `apache-ant-1.9.0/` alongside the `Dockerfile` and `entrypoint.sh`.
-
 1. Copy a database dump into place:
 
     ```sh
@@ -64,7 +42,9 @@ A Docker image is available on Docker Hub [here](https://hub.docker.com/reposito
 
 ## Building the image
 
-Run this when there are Dockerfile or configuration changes:
+Run this when there are Dockerfile or configuration changes. The script
+automatically downloads Apache Tomcat 8.5.30 and Apache Ant 1.9.0 into
+`docker/tomcat/` if they are not already present.
 
 ```sh
 cd /opt/biobank/biobank-thick-client
