@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.acegisecurity.providers.rcp.RemoteAuthenticationException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.ui.PlatformUI;
 import org.springframework.remoting.RemoteAccessException;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -46,9 +45,6 @@ public class SessionHelper implements Runnable {
     private BiobankApplicationService appService;
 
     private UserWrapper user;
-
-    private static Boolean firstConnection = true;
-    private static Boolean restartPending = false;
 
     @SuppressWarnings("nls")
     private static final String DEFAULT_TEST_USER = "testuser";
@@ -85,22 +81,20 @@ public class SessionHelper implements Runnable {
             + "\nSHA1 fingerprint is {1}"
             + "\nMD5 fingerprint is {2}"
             + "\nAre you sure you want to continue?"
-            + "\n(Choosing yes will trust this certificate forever and may require an application restart)";
+            + "\n(Choosing yes will permanently trust this certificate)";
 
     @SuppressWarnings("nls")
-    private boolean checkCertificates(String serverUrl, Boolean firstConnection)
+    private void checkCertificates(String serverUrl)
         throws KeyManagementException, NoSuchAlgorithmException,
         KeyStoreException, UnknownHostException, IOException,
         CertificateException {
         TrustStore ts = TrustStore.getInstance();
         List<Cert> untrustedCerts = ts.getUntrustedCerts(serverUrl);
-        boolean restartPending = false;
 
         if (!untrustedCerts.isEmpty()) {
             MessageDigest sha1 = MessageDigest.getInstance("SHA1");
             MessageDigest md5 = MessageDigest.getInstance("MD5");
 
-            boolean trustedAny = false;
             for (Cert untrustedCert : untrustedCerts) {
                 byte[] encoded = untrustedCert.getCertificate().getEncoded();
                 String host = untrustedCert.getUrl().getHost();
@@ -115,24 +109,12 @@ public class SessionHelper implements Runnable {
 
                 if (trustCert) {
                     untrustedCert.trust();
-                    trustedAny = true;
                 } else {
                     throw new RuntimeException("Untrusted SSL certificate.");
                 }
             }
-
-            if (trustedAny && !firstConnection) {
-                // restart because the trustStore has been read from once.
-                BgcPlugin
-                    .openInformation(
-                        i18n.tr("Restart Required"),
-                        i18n.tr("The application must be restarted to connect to the entered server."));
-                restartPending = true;
-                PlatformUI.getWorkbench().close();
-            }
         }
 
-        return restartPending;
     }
 
     @SuppressWarnings("nls")
@@ -153,9 +135,7 @@ public class SessionHelper implements Runnable {
     @Override
     public void run() {
         try {
-            restartPending = checkCertificates(serverUrl, firstConnection);
-            firstConnection = false;
-            if (restartPending) return;
+            checkCertificates(serverUrl);
 
             if (userName.length() == 0) {
                 if (BiobankPlugin.getDefault().isDebugging()) {

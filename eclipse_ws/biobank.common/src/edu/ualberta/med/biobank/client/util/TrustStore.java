@@ -77,11 +77,12 @@ public final class TrustStore {
         }
 
         public void trust() throws KeyStoreException, NoSuchAlgorithmException,
-            CertificateException, IOException {
+            CertificateException, IOException, KeyManagementException {
             String alias = getAlias(url);
 
             ks.setCertificateEntry(alias, cert);
             flush();
+            updateDefaultSslContext();
         }
 
         private String getAlias(URL url) throws KeyStoreException {
@@ -116,7 +117,6 @@ public final class TrustStore {
             int port = (url.getPort() != -1) ? url.getPort() : 443;
 
             SSLSocket socket = (SSLSocket) factory.createSocket(host, port);
-            socket.setEnabledProtocols(new String[] { "TLSv1.2" }); //$NON-NLS-1$
             socket.setSoTimeout(5000);
 
             try {
@@ -151,7 +151,7 @@ public final class TrustStore {
 
     private void initKeyStore(KeyStore ks)
         throws IOException, NoSuchAlgorithmException, CertificateException,
-        KeyStoreException {
+        KeyStoreException, KeyManagementException {
         File file = new File(CUSTOM_TRUST_STORE_PATH);
 
         String inputFile = null;
@@ -168,6 +168,23 @@ public final class TrustStore {
         System.setProperty(TRUST_STORE_PROPERTY_NAME, file.getAbsolutePath());
 
         flush();
+        updateDefaultSslContext();
+    }
+
+    /**
+     * Installs the current in-memory KeyStore as the JVM default SSLContext and default
+     * HttpsURLConnection socket factory.  Called on startup and after every cert trust() so
+     * that connections pick up the change immediately without a restart.
+     */
+    private void updateDefaultSslContext()
+        throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException {
+        String alg = TrustManagerFactory.getDefaultAlgorithm();
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(alg);
+        tmf.init(ks);
+        SSLContext ctx = SSLContext.getInstance("TLS");
+        ctx.init(null, tmf.getTrustManagers(), null);
+        SSLContext.setDefault(ctx);
+        HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
     }
 
     private void flush()
