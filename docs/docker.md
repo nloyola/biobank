@@ -44,31 +44,15 @@ A Docker image is available on Docker Hub [here](https://hub.docker.com/reposito
 
 Run this when there are Dockerfile or configuration changes. The script
 automatically downloads Apache Tomcat 8.5.30 and Apache Ant 1.9.0 into
-`docker/tomcat/` if they are not already present.
+`docker/tomcat/` if they are not already present, and generates the SSL
+certificate if `docker/nginx-selfsigned.crt` does not exist.
 
 ```sh
 cd /opt/biobank/biobank-thick-client
 ./bb-build.sh
 ```
 
-## Generating the SSL Certificate
-
-Run this after building the image. The cert generation runs inside the Tomcat
-container so it has access to `openssl` and `ant` without requiring them on the
-host. Because the container uses `network_mode: host`, `ant nginx-cert-gen`
-detects the host's IP address correctly.
-
-Java 7 enforces Subject Alternative Name (SAN) verification and will reject
-certificates that lack a SAN matching the address the thick client connects
-to. The CN alone is not sufficient.
-
-```sh
-cd /opt/biobank/biobank-thick-client
-docker compose --env-file .env -f docker/compose.yaml --project-directory docker \
-    run --no-deps --rm tomcat ant nginx-cert-gen
-```
-
-The target prompts twice:
+The SSL certificate generation prompts twice:
 
 - **CN** — the hostname or IP address users type into the thick client
   (e.g. `192.168.50.3` or `biobank.cbsr.ualberta.ca`). Defaults to the
@@ -78,9 +62,12 @@ The target prompts twice:
   if clients connect via different names or addresses
   (e.g. `IP:192.168.50.3,DNS:biobank.example.com`).
 
-The target writes `docker/nginx-selfsigned.crt` and `docker/nginx-selfsigned.key`
-directly on the host via the volume mount. Do not commit these files — the key
-is secret and the certificate is specific to this host.
+Java 7 enforces Subject Alternative Name (SAN) verification and will reject
+certificates that lack a SAN matching the address the thick client connects
+to. The CN alone is not sufficient.
+
+The cert and key are written to `docker/` via the volume mount. Do not commit
+these files — the key is secret and the certificate is specific to this host.
 
 ## Running Biobank
 
@@ -116,6 +103,26 @@ To stop and remove the containers:
 
 ```sh
 ./bb-stop.sh
+```
+
+## Troubleshooting
+
+### nginx fails to load the SSL certificate
+
+If the containers are started before `bb-build.sh` has generated the certificate,
+Docker creates `docker/nginx-selfsigned.crt` and `docker/nginx-selfsigned.key` as
+directories rather than files. nginx then fails with:
+
+```
+nginx: [emerg] cannot load certificate "/etc/nginx/ssl/nginx-selfsigned.crt": PEM_read_bio_X509_AUX() failed
+```
+
+Fix: stop the containers, remove the directories, and rebuild:
+
+```sh
+./bb-stop.sh
+rm -rf docker/nginx-selfsigned.crt docker/nginx-selfsigned.key
+./bb-build.sh
 ```
 
 ## Redeploying after a code change

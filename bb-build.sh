@@ -18,3 +18,10 @@ if [ ! -d docker/tomcat/apache-ant-1.9.0 ]; then
 fi
 
 docker compose --env-file .env -f docker/compose.yaml --project-directory docker build --no-cache
+
+# Generate the SSL certificate if not already present
+if [ ! -f docker/nginx-selfsigned.crt ] || [ ! -f docker/nginx-selfsigned.key ]; then
+    echo "Generating SSL certificate..."
+    docker compose --env-file .env -f docker/compose.yaml --project-directory docker \
+        run --no-deps --rm tomcat ant nginx-cert-gen
+fi
