@@ -97,3 +97,15 @@ biobank*.deb
 package-tomcat/debian/opt/tomcat/apache-tomcat-8.5.30
 package-tomcat/debian/opt/tomcat/templates
 package-tomcat/debian/opt/tomcat/tools
+/docker/jboss-4.0.5.GA.zip
+/docker/jboss-4.0.5.GA/
+/docker/jdk-6u45-linux-x64.bin
+/docker/jdk1.6.0_45/
+/docker/nginx-selfsigned.crt
+/docker/nginx-selfsigned.key
+/docker/tomcat/apache-ant-1.9.0/
+/docker/tomcat/apache-tomcat-8.5.30/
+/ivy-deps.tar.gz
+/docker/build-client/
+/docker/apache-ant-1.9.0-bin.tar.bz2
+/security-logs/jboss/

@@ -267,7 +267,7 @@
 
   <target name="create-messages-jar" depends="check-messages-jar-exists"
 	  unless="messages-jar-exists">
-    <antcall target="messages-jar "/>
+    <antcall target="messages-jar"/>
   </target>
 
 

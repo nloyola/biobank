@@ -13,15 +13,6 @@ A Docker image is available on Docker Hub [here](https://hub.docker.com/reposito
     cd /opt/biobank/biobank-thick-client
     ```
 
-1. Download and unzip the unversioned assets:
-
-    ```sh
-    curl https://biobank.cbsr.ualberta.ca/unversioned/biobank_unversioned_v3.10.5.zip -o biobank_unversioned_v3.10.5.zip
-    unzip biobank_unversioned_v3.10.5.zip
-    ```
-
-    You need `zip` and `unzip` installed.
-
 1. Create `.env` in the project root with the following content:
 
     ```ini
@@ -43,32 +34,6 @@ A Docker image is available on Docker Hub [here](https://hub.docker.com/reposito
 
     Replace `changeme` with your chosen credentials.
 
-1. Generate a self-signed SSL certificate for Nginx. Requires `openssl` and
-   `ant` on your PATH.
-
-   Java 7 enforces Subject Alternative Name (SAN) verification and will reject
-   certificates that lack a SAN matching the address the thick client connects
-   to. The CN alone is not sufficient.
-
-    ```sh
-    cd /opt/biobank/biobank-thick-client
-    ant nginx-cert-gen
-    ```
-
-   The target prompts twice:
-
-   - **CN** — the hostname or IP address users type into the thick client
-     (e.g. `192.168.50.3` or `biobank.cbsr.ualberta.ca`). Defaults to the
-     machine's local IP address.
-   - **subjectAltName** — the SAN entries for the certificate. Defaults to
-     `IP:<local-ip>,DNS:localhost`. Add additional entries separated by commas
-     if clients connect via different names or addresses
-     (e.g. `IP:192.168.50.3,DNS:biobank.example.com`).
-
-   The target writes `docker/nginx-selfsigned.crt` and
-   `docker/nginx-selfsigned.key`. Do not commit these files — the key is
-   secret and the certificate is specific to this host.
-
 1. Provide the Tomcat and Ant distributions required by the Tomcat Docker image.
    These are not committed to the repository because of their size.
 
@@ -80,10 +45,12 @@ A Docker image is available on Docker Hub [here](https://hub.docker.com/reposito
     rm apache-tomcat-8.5.30.tar.gz
     ```
 
-   Extract the Ant distribution (already in the repo) into `docker/tomcat/`:
+   Download Apache Ant 1.9.0 and extract it into `docker/tomcat/`:
 
     ```sh
-    tar -xjf docker/apache-ant-1.9.0-bin.tar.bz2 -C docker/tomcat/
+    curl -O https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.0-bin.tar.gz
+    tar -xzf apache-ant-1.9.0-bin.tar.gz -C docker/tomcat/
+    rm apache-ant-1.9.0-bin.tar.gz
     ```
 
    After this, `docker/tomcat/` should contain `apache-tomcat-8.5.30/` and
@@ -103,6 +70,37 @@ Run this when there are Dockerfile or configuration changes:
 cd /opt/biobank/biobank-thick-client
 docker compose --env-file .env -f docker/compose.yaml --project-directory docker build --no-cache
 ```
+
+## Generating the SSL Certificate
+
+Run this after building the image. The cert generation runs inside the Tomcat
+container so it has access to `openssl` and `ant` without requiring them on the
+host. Because the container uses `network_mode: host`, `ant nginx-cert-gen`
+detects the host's IP address correctly.
+
+Java 7 enforces Subject Alternative Name (SAN) verification and will reject
+certificates that lack a SAN matching the address the thick client connects
+to. The CN alone is not sufficient.
+
+```sh
+cd /opt/biobank/biobank-thick-client
+docker compose --env-file .env -f docker/compose.yaml --project-directory docker \
+    run --no-deps --rm tomcat ant nginx-cert-gen
+```
+
+The target prompts twice:
+
+- **CN** — the hostname or IP address users type into the thick client
+  (e.g. `192.168.50.3` or `biobank.cbsr.ualberta.ca`). Defaults to the
+  machine's local IP address.
+- **subjectAltName** — the SAN entries for the certificate. Defaults to
+  `IP:<local-ip>,DNS:localhost`. Add additional entries separated by commas
+  if clients connect via different names or addresses
+  (e.g. `IP:192.168.50.3,DNS:biobank.example.com`).
+
+The target writes `docker/nginx-selfsigned.crt` and `docker/nginx-selfsigned.key`
+directly on the host via the volume mount. Do not commit these files — the key
+is secret and the certificate is specific to this host.
 
 ## Running Biobank
 
