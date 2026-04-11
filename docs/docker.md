@@ -68,7 +68,7 @@ Run this when there are Dockerfile or configuration changes:
 
 ```sh
 cd /opt/biobank/biobank-thick-client
-docker compose --env-file .env -f docker/compose.yaml --project-directory docker build --no-cache
+./bb-build.sh
 ```
 
 ## Generating the SSL Certificate
@@ -108,7 +108,7 @@ Start all containers:
 
 ```sh
 cd /opt/biobank/biobank-thick-client
-docker compose --env-file .env -f docker/compose.yaml --project-directory docker up
+./bb-start.sh
 ```
 
 On first run the database container imports the dump, which may take a few minutes. The Tomcat
@@ -120,19 +120,24 @@ tomcat-1  | INFO  [DbMigrator] Current schema version: 1.7
 tomcat-1  | INFO  [DbMigrator] Schema is up to date. No migration necessary.
 ```
 
-Once the database has been imported, shut down with `CTRL-c` and restart in detached mode so the
-containers survive a reboot:
+On first run, follow the logs to confirm startup before using the application:
 
 ```sh
-docker compose --env-file .env -f docker/compose.yaml --project-directory docker up --detach
+docker compose --env-file .env -f docker/compose.yaml --project-directory docker logs -f
+```
+
+To stop and remove the containers:
+
+```sh
+./bb-stop.sh
 ```
 
 ## Redeploying after a code change
 
-With the containers running, exec into the Tomcat container and run Ant:
+With the containers running:
 
 ```sh
-docker compose --env-file .env -f docker/compose.yaml --project-directory docker exec tomcat ant deploy_tomcat
+./bb-deploy.sh
 ```
 
 ## Publishing the image to Docker Hub
