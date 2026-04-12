@@ -1,36 +1,34 @@
 #!/bin/bash
 
-#set -o verbose
+set -euo pipefail
 
-ARGS=3
-E_BADARGS=85
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+ENV_FILE="$PROJECT_ROOT/.env"
+COMPOSE_FILE="$PROJECT_ROOT/docker/compose.yaml"
+OUTPUT_DIR="${1:-.}"
 
-if [ $# -lt $ARGS ]  # Correct number of arguments passed to script?
-then
-  echo "Usage: `basename $0` HOST USER PWD [DBNAME] "
-  exit $E_BADARGS
+if [ ! -f "$ENV_FILE" ]; then
+    echo "Error: .env file not found at $ENV_FILE" >&2
+    exit 1
 fi
 
-MYSQLDUMP="/usr/bin/mysqldump"
+# shellcheck source=/dev/null
+source "$ENV_FILE"
 
-HOST=$1
-USER=$2
-PWD=$3
-DBNAME=$4
-FILENAME="./${DBNAME}_`date +%Y%m%d`.sql.gz"
+DBNAME="${DB_NAME:-biobank}"
+FILENAME="$OUTPUT_DIR/${DBNAME}_$(date +%Y%m%d).sql.gz"
 
 # tables to skip
 skip_tables=( log_message object_attribute objectattributes )
 
-if [ -z "$DBNAME" ]; then
-    DBNAME=biobank
-fi
-
-OPTS=
-n=${#skip_tables[@]}
-for (( i = 0; i < n; i++ )) do
-        OPTS[$i]="--ignore-table=${DBNAME}.${skip_tables[$i]}"
+OPTS=()
+for table in "${skip_tables[@]}"; do
+    OPTS+=("--ignore-table=${DBNAME}.${table}")
 done
 
-$MYSQLDUMP ${OPTS[*]} -h$HOST -u$USER -p$PWD $DBNAME | gzip > $FILENAME
+docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" --project-directory "$PROJECT_ROOT/docker" \
+    exec -T db mariadb-dump "${OPTS[@]}" -u"$DB_ROOT_USER" -p"$DB_ROOT_PASSWORD" "$DBNAME" \
+    | gzip > "$FILENAME"
+
 echo "Database dumped to $FILENAME"
