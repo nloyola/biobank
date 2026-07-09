@@ -1,0 +1,7 @@
+---
+# Template for the encrypted vault. To use:
+#   cp vault.example.yml vault.yml
+#   # fill in real values, then:
+#   ansible-vault encrypt vault.yml
+vault_db_root_password: ""
+vault_db_password: ""
