@@ -4,7 +4,7 @@ Converges a fresh Ubuntu VM (over SSH) into a running biobank server. Idempotent
 
 ## Prerequisites
 
-- Ansible + ansible-lint on your machine (`pip install --user ansible ansible-lint`).
+- Ansible, ansible-lint, and passlib on your machine (`pip install --user ansible ansible-lint passlib`). passlib is required on the controller for the `password_hash` filter that sets the biobank operator account's password (Python 3.11+ dropped the stdlib `crypt` module Ansible used before).
 - SSH access to the target VM as a sudo-capable user.
 - The initial DB dump reachable at a URL.
 
