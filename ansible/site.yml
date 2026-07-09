@@ -1,0 +1,5 @@
+---
+- name: Provision the biobank server
+  hosts: biobank
+  gather_facts: true
+  roles: []
