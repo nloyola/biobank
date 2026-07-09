@@ -27,3 +27,4 @@ Please see the Wiki for this project for more documentation.
 
 1. [Wiki](https://github.com/CBSR-Biobank/biobank/wiki)
 1. [Running on Docker](docs/docker.md)
+1. [Provisioning a server with Ansible](ansible/README.md)

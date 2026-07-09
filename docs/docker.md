@@ -4,13 +4,18 @@ Follow these instructions to get Biobank running under Docker on a Linux host.
 
 A Docker image is available on Docker Hub [here](https://hub.docker.com/repository/docker/nloyola/biobank/general).
 
+> **Automated provisioning:** to set up a new host end-to-end (install Docker, clone the
+> repo, render `.env`, generate the TLS certificate, build the images, and start the
+> stack), use the Ansible playbook - see [ansible/README.md](../ansible/README.md). The
+> steps below are the manual equivalent.
+
 ## Setup
 
 1. Clone the repository:
 
     ```sh
-    git clone git@github.com:CBSR-Biobank/biobank.git /opt/biobank/biobank-thick-client
-    cd /opt/biobank/biobank-thick-client
+    git clone https://github.com/nloyola/biobank.git /opt/biobank/biobank-server
+    cd /opt/biobank/biobank-server
     ```
 
 1. Create `.env` in the project root with the following content:
@@ -37,7 +42,7 @@ A Docker image is available on Docker Hub [here](https://hub.docker.com/reposito
 1. Copy a database dump into place:
 
     ```sh
-    cp __path_to_dump__ /opt/biobank/biobank-thick-client/database/db_initial.sql.gz
+    cp __path_to_dump__ /opt/biobank/biobank-server/database/db_initial.sql.gz
     ```
 
 ## Building the image
@@ -48,7 +53,7 @@ automatically downloads Apache Tomcat 8.5.30 and Apache Ant 1.9.0 into
 certificate if `docker/nginx-selfsigned.crt` does not exist.
 
 ```sh
-cd /opt/biobank/biobank-thick-client
+cd /opt/biobank/biobank-server
 ./bb-build.sh
 ```
 
@@ -74,7 +79,7 @@ these files — the key is secret and the certificate is specific to this host.
 Start all containers:
 
 ```sh
-cd /opt/biobank/biobank-thick-client
+cd /opt/biobank/biobank-server
 ./bb-start.sh
 ```
 
@@ -137,7 +142,7 @@ With the containers running:
 
 ```sh
 docker compose --env-file .env -f docker/compose.yaml --project-directory docker build --no-cache
-docker push nloyola/biobank_v3.12.:0.1
+docker push nloyola/biobank:0.1
 ```
 
 Replace `nloyola` with your Docker Hub account name and `0.1` with the new version number.
