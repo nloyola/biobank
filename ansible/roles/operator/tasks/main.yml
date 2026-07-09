@@ -101,3 +101,29 @@
       setopt PROMPT_SUBST
       PROMPT='%F{green}%n%f@%F{cyan}%m%f %F{yellow}%~%f %# '
   loop: "{{ biobank_zsh_accounts }}"
+
+# Let operators reach the biobank account directly over SSH (e.g. for debugging
+# the stack) by authorizing the same keys that already work for the admin
+# (connection) account. The host is SSH key-only, so this - not a password - is
+# what makes `ssh biobank@<host>` work. Mirroring the admin's keys keeps biobank
+# access in sync with whoever can already log in as the admin.
+- name: Ensure the biobank ~/.ssh directory exists
+  ansible.builtin.file:
+    path: "{{ biobank_operator_home }}/.ssh"
+    state: directory
+    owner: "{{ biobank_operator_user }}"
+    group: "{{ biobank_operator_user }}"
+    mode: "0700"
+
+- name: Read the admin account's authorized_keys
+  ansible.builtin.slurp:
+    src: "/home/{{ ansible_user }}/.ssh/authorized_keys"
+  register: operator_admin_authkeys
+
+- name: Authorize the same SSH keys for the biobank account
+  ansible.builtin.copy:
+    dest: "{{ biobank_operator_home }}/.ssh/authorized_keys"
+    content: "{{ operator_admin_authkeys.content | b64decode }}"
+    owner: "{{ biobank_operator_user }}"
+    group: "{{ biobank_operator_user }}"
+    mode: "0600"
