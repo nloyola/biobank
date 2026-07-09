@@ -5,3 +5,11 @@
   roles:
     - role: docker
       become: true
+
+  tasks:
+    - name: Reset the SSH connection so docker group membership applies
+      ansible.builtin.meta: reset_connection
+
+    - name: Run the biobank role
+      ansible.builtin.include_role:
+        name: biobank

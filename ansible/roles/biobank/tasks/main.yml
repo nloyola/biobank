@@ -1,0 +1,72 @@
+---
+- name: Ensure the parent directory exists (operator-owned)
+  become: true
+  ansible.builtin.file:
+    path: "{{ biobank_repo_dest | dirname }}"
+    state: directory
+    owner: "{{ biobank_operator_user }}"
+    group: "{{ biobank_operator_user }}"
+    mode: "0755"
+
+- name: Clone or update the biobank repository
+  ansible.builtin.git:
+    repo: "{{ biobank_repo_url }}"
+    dest: "{{ biobank_repo_dest }}"
+    version: "{{ biobank_repo_version }}"
+    update: true
+
+- name: Render .env
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ biobank_repo_dest }}/.env"
+    mode: "0600"
+
+- name: Detect whether the database is already seeded
+  ansible.builtin.stat:
+    path: "{{ biobank_repo_dest }}/database/lib/ibdata1"
+  register: biobank_db_seeded
+
+- name: Fetch the initial DB dump (only when not yet seeded)
+  ansible.builtin.get_url:
+    url: "{{ biobank_db_dump_url }}"
+    dest: "{{ biobank_repo_dest }}/database/db_initial.sql.gz"
+    mode: "0644"
+  when: not biobank_db_seeded.stat.exists
+
+- name: Detect whether the TLS certificate exists
+  ansible.builtin.stat:
+    path: "{{ biobank_repo_dest }}/docker/nginx-selfsigned.crt"
+  register: biobank_cert
+
+- name: Generate a self-signed TLS certificate (non-interactive)
+  ansible.builtin.command:
+    cmd: >-
+      openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes
+      -keyout docker/nginx-selfsigned.key
+      -out docker/nginx-selfsigned.crt
+      -subj "/CN={{ biobank_cert_cn }}"
+      -addext "subjectAltName={{ biobank_cert_san }}"
+    chdir: "{{ biobank_repo_dest }}"
+  changed_when: true
+  when: not biobank_cert.stat.exists
+
+- name: Check whether the tomcat image is built
+  ansible.builtin.command:
+    cmd: docker image inspect nloyola/biobank:0.1
+  register: biobank_image
+  changed_when: false
+  failed_when: false
+
+- name: Build images (only when missing)
+  ansible.builtin.command:
+    cmd: ./bb-build.sh
+    chdir: "{{ biobank_repo_dest }}"
+  changed_when: true
+  when: biobank_image.rc != 0
+
+- name: Start the stack
+  ansible.builtin.command:
+    cmd: ./bb-start.sh
+    chdir: "{{ biobank_repo_dest }}"
+  register: biobank_start
+  changed_when: "'Started' in biobank_start.stderr or 'Created' in biobank_start.stderr"
