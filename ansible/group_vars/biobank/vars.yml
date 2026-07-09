@@ -1,6 +1,6 @@
 ---
 # Repository to deploy
-biobank_repo_url: "git@github.com:CBSR-Biobank/biobank.git"
+biobank_repo_url: "https://github.com/nloyola/biobank.git"
 biobank_repo_version: "ltri-dev-docker"
 biobank_repo_dest: "/opt/biobank/biobank-server"
 biobank_operator_user: "{{ ansible_user }}"

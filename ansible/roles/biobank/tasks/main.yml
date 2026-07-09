@@ -14,6 +14,13 @@
     dest: "{{ biobank_repo_dest }}"
     version: "{{ biobank_repo_version }}"
     update: true
+    # Discard stray edits to tracked build artifacts (e.g. messages.mo);
+    # untracked files such as .env and logs/ are left untouched.
+    force: true
+    # The eclipse_ws/* submodules use dead git:// URLs (GitHub dropped the
+    # unencrypted git protocol) and are client-side only - the server Docker
+    # stack does not need them, so never recurse into submodules.
+    recursive: false
 
 - name: Render .env
   ansible.builtin.template:
