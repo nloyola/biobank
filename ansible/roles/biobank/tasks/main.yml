@@ -1,13 +1,7 @@
 ---
-- name: Ensure the parent directory exists (operator-owned)
-  become: true
-  ansible.builtin.file:
-    path: "{{ biobank_repo_dest | dirname }}"
-    state: directory
-    owner: "{{ biobank_operator_user }}"
-    group: "{{ biobank_operator_user }}"
-    mode: "0755"
-
+# Every task here runs as the biobank operator (become_user set at the role
+# level in site.yml). The operator role has already created /opt/biobank as the
+# account's home, so the repo below is cloned into and owned by that account.
 - name: Clone or update the biobank repository
   ansible.builtin.git:
     repo: "{{ biobank_repo_url }}"
@@ -33,12 +27,24 @@
     path: "{{ biobank_repo_dest }}/database/lib/ibdata1"
   register: biobank_db_seeded
 
-- name: Fetch the initial DB dump (only when not yet seeded)
+# Only when a dump URL is configured. Sites that copy the dump in by hand leave
+# biobank_db_dump_url empty and this is skipped; the seeded guard avoids
+# clobbering a live database.
+- name: Fetch the initial DB dump (only when a URL is set and not yet seeded)
   ansible.builtin.get_url:
     url: "{{ biobank_db_dump_url }}"
     dest: "{{ biobank_repo_dest }}/database/db_initial.sql.gz"
     mode: "0644"
-  when: not biobank_db_seeded.stat.exists
+  when:
+    - biobank_db_dump_url | length > 0
+    - not biobank_db_seeded.stat.exists
+
+# Runs after the fetch so it reflects a just-fetched dump as well as one the
+# operator copied in by hand. Gates whether the stack can be started below.
+- name: Detect whether the initial DB dump is present
+  ansible.builtin.stat:
+    path: "{{ biobank_repo_dest }}/database/db_initial.sql.gz"
+  register: biobank_db_dump
 
 - name: Detect whether the TLS certificate exists
   ansible.builtin.stat:
@@ -71,9 +77,22 @@
   changed_when: true
   when: biobank_image.rc != 0
 
+# Start only when there is a database to serve: either already seeded, or a dump
+# is present for the db container to import on first start. On a fresh host where
+# the operator will copy the dump in later, this is skipped (see the notice).
 - name: Start the stack
   ansible.builtin.command:
     cmd: ./bb-start.sh
     chdir: "{{ biobank_repo_dest }}"
   register: biobank_start
   changed_when: "'Started' in biobank_start.stderr or 'Created' in biobank_start.stderr"
+  when: biobank_db_seeded.stat.exists or biobank_db_dump.stat.exists
+
+- name: Report that the stack was not started (no database yet)
+  ansible.builtin.debug:
+    msg: >-
+      Stack provisioned but NOT started: the database is not seeded and no dump
+      is present. Copy the dump to
+      {{ biobank_repo_dest }}/database/db_initial.sql.gz, then run ./bb-start.sh
+      on the host (or re-run this playbook).
+  when: not (biobank_db_seeded.stat.exists or biobank_db_dump.stat.exists)

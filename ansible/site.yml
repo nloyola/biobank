@@ -3,15 +3,16 @@
   hosts: biobank
   gather_facts: true
   roles:
+    # Install the Docker engine and create the docker group (as root).
     - role: docker
       become: true
+    # Create the biobank operator account and the operators' shell environment
+    # (as root).
     - role: operator
       become: true
-
-  tasks:
-    - name: Reset the SSH connection so docker group membership applies
-      ansible.builtin.meta: reset_connection
-
-    - name: Run the biobank role
-      ansible.builtin.include_role:
-        name: biobank
+    # Deploy and run the stack as the unprivileged biobank operator. A fresh
+    # sudo-to-biobank picks up its docker group membership directly, so no
+    # connection reset is needed.
+    - role: biobank
+      become: true
+      become_user: "{{ biobank_operator_user }}"

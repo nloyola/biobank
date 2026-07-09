@@ -2,13 +2,14 @@
 # Repository to deploy
 biobank_repo_url: "https://github.com/nloyola/biobank.git"
 biobank_repo_version: "ltri-dev-docker"
+# Cloned into the operator account's home (/opt/biobank) and owned by it.
 biobank_repo_dest: "/opt/biobank/biobank-server"
 
 # Operator account: a dedicated, unprivileged user that owns the repo and runs
 # the stack. Decoupled from the Ansible connection user (ansible_user), which
 # only needs sudo to provision. Created by the operator role.
 biobank_operator_user: "biobank"
-biobank_operator_home: "/home/biobank"
+biobank_operator_home: "/opt/biobank"
 biobank_operator_shell: "/usr/bin/zsh"
 
 # Interactive shell tooling installed for the operators (not needed to run the
@@ -21,16 +22,18 @@ biobank_shell_packages:
 
 # Accounts that get zsh as their login shell and the managed .zshrc block.
 biobank_zsh_accounts:
-  - { name: "biobank", home: "/home/biobank" }
+  - { name: "biobank", home: "/opt/biobank" }
   - { name: "bbadmin", home: "/home/bbadmin" }
 
 # TLS certificate (per site). CN is the address the thick client connects to;
 # SAN must include it too (Java 7 enforces subjectAltName).
-biobank_cert_cn: "CHANGE_ME"
-biobank_cert_san: "DNS:localhost"
+biobank_cert_cn: "biobankarchive.lunenfeld.ca"
+biobank_cert_san: "DNS:biobankarchive.lunenfeld.ca"
 
-# Initial database dump (fetched only when the DB is not yet seeded)
-biobank_db_dump_url: "CHANGE_ME"
+# Initial database dump URL. Leave empty to skip the automatic fetch (e.g. when
+# the operator copies the dump in by hand); the fetch runs only when this is set
+# and the DB is not yet seeded.
+biobank_db_dump_url: ""
 
 # Non-secret .env values
 biobank_env_mode: "PRODUCTION"
