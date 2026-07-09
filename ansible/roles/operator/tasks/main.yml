@@ -12,6 +12,29 @@
     update_cache: true
     cache_valid_time: 3600
 
+# lazydocker is not packaged in apt, so install the pinned release binary
+# system-wide to /usr/local/bin (root-owned, 0755) so every user has it. The
+# version check makes this idempotent and lets a version bump trigger an
+# upgrade: `lazydocker --version` prints "Version: <x>", so a matching pinned
+# version is a substring of stdout and the install is skipped.
+- name: Check the installed lazydocker version
+  ansible.builtin.command: lazydocker --version
+  register: operator_lazydocker
+  changed_when: false
+  failed_when: false
+
+- name: Install lazydocker system-wide
+  ansible.builtin.unarchive:
+    src: "{{ lazydocker_release_base }}/v{{ lazydocker_version }}/lazydocker_{{ lazydocker_version }}_Linux_{{ lazydocker_tarball_arch }}.tar.gz"
+    dest: /usr/local/bin
+    remote_src: true
+    include:
+      - lazydocker
+    owner: root
+    group: root
+    mode: "0755"
+  when: lazydocker_version not in operator_lazydocker.stdout
+
 - name: Ensure the biobank group exists
   ansible.builtin.group:
     name: "{{ biobank_operator_user }}"

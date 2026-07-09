@@ -20,6 +20,14 @@ biobank_shell_packages:
   - fzf
   - zoxide
 
+# lazydocker (terminal UI for Docker), installed system-wide to /usr/local/bin
+# for all users. Not packaged in apt, so the pinned release binary is fetched
+# from GitHub. The tarball arch token differs from ansible_architecture for
+# arm (aarch64 -> arm64); x86_64 matches directly.
+lazydocker_version: "0.25.2"
+lazydocker_tarball_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else ansible_architecture }}"
+lazydocker_release_base: "https://github.com/jesseduffield/lazydocker/releases/download"
+
 # Accounts that get zsh as their login shell and the managed .zshrc block.
 biobank_zsh_accounts:
   - { name: "biobank", home: "/opt/biobank" }
