@@ -1,0 +1,80 @@
+---
+# Interactive shell tooling for the operators (zsh + fzf + zoxide), plus acl.
+# fzf and zoxide live in Ubuntu's `universe` component (enabled by default on
+# 24.04). acl is required so Ansible can hand its temp files to the unprivileged
+# biobank account when a task runs as `become_user: biobank` (setfacl handoff) -
+# without it those biobank-role tasks fail. zsh must land before the login-shell
+# tasks below.
+- name: Install operator shell tooling and acl
+  ansible.builtin.apt:
+    name: "{{ biobank_shell_packages + ['acl'] }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure the biobank group exists
+  ansible.builtin.group:
+    name: "{{ biobank_operator_user }}"
+    gid: "{{ biobank_gid }}"
+    state: present
+
+# The docker group is created by the docker role (which runs first); sudo exists
+# by default on Ubuntu. Password is only set on first creation, so re-runs never
+# rewrite an existing hash.
+- name: Create the biobank operator account
+  ansible.builtin.user:
+    name: "{{ biobank_operator_user }}"
+    uid: "{{ biobank_uid }}"
+    group: "{{ biobank_operator_user }}"
+    groups: [sudo, docker]
+    append: true
+    home: "{{ biobank_operator_home }}"
+    create_home: true
+    shell: "{{ biobank_operator_shell }}"
+    password: "{{ vault_biobank_account_password | password_hash('sha512') }}"
+    update_password: on_create
+
+- name: Set the login shell to zsh for each operator
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    shell: "{{ biobank_operator_shell }}"
+  loop: "{{ biobank_zsh_accounts }}"
+
+# blockinfile (create: true) leaves any hand-added .zshrc content untouched. The
+# fzf snippet is version-robust: fzf >= 0.48 generates its own integration script
+# (`fzf --zsh`); the packaged fzf on Ubuntu 24.04 (0.44) instead ships the
+# key-binding/completion files under /usr/share/doc/fzf/examples/. The prompt
+# uses %n (current user), so the same block renders correctly for every operator.
+- name: Wire fzf + zoxide, aliases, and prompt into each operator's .zshrc
+  ansible.builtin.blockinfile:
+    path: "{{ item.home }}/.zshrc"
+    create: true
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: "0644"
+    marker: "# {mark} fzf + zoxide (managed by ansible)"
+    block: |
+      # fzf - fuzzy finder key bindings (Ctrl-R, Ctrl-T, Alt-C) + completion.
+      if command -v fzf >/dev/null 2>&1; then
+        if fzf --zsh >/dev/null 2>&1; then
+          source <(fzf --zsh)
+        else
+          [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+          [ -f /usr/share/doc/fzf/examples/completion.zsh ]   && source /usr/share/doc/fzf/examples/completion.zsh
+        fi
+      fi
+
+      # zoxide - smarter `cd` (jump with `z <dir>`). Stable across all versions.
+      command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+
+      # Aliases for the operator accounts.
+      alias ll='ls -alF'
+      alias dc='docker compose'
+      alias dcl='docker compose logs -f'
+      alias biobank='cd {{ biobank_repo_dest }}'
+
+      # Prompt: green user @ cyan host, yellow cwd. PROMPT_SUBST keeps it live.
+      autoload -Uz colors && colors
+      setopt PROMPT_SUBST
+      PROMPT='%F{green}%n%f@%F{cyan}%m%f %F{yellow}%~%f %# '
+  loop: "{{ biobank_zsh_accounts }}"

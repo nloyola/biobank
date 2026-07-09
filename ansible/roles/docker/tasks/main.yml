@@ -45,9 +45,3 @@
     name: docker
     enabled: true
     state: started
-
-- name: Add the operator to the docker group
-  ansible.builtin.user:
-    name: "{{ biobank_operator_user }}"
-    groups: docker
-    append: true

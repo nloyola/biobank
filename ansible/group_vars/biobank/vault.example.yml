@@ -5,3 +5,5 @@
 #   ansible-vault encrypt vault.yml
 vault_db_root_password: ""
 vault_db_password: ""
+# Login + sudo password for the dedicated biobank operator account.
+vault_biobank_account_password: ""

@@ -3,7 +3,26 @@
 biobank_repo_url: "https://github.com/nloyola/biobank.git"
 biobank_repo_version: "ltri-dev-docker"
 biobank_repo_dest: "/opt/biobank/biobank-server"
-biobank_operator_user: "{{ ansible_user }}"
+
+# Operator account: a dedicated, unprivileged user that owns the repo and runs
+# the stack. Decoupled from the Ansible connection user (ansible_user), which
+# only needs sudo to provision. Created by the operator role.
+biobank_operator_user: "biobank"
+biobank_operator_home: "/home/biobank"
+biobank_operator_shell: "/usr/bin/zsh"
+
+# Interactive shell tooling installed for the operators (not needed to run the
+# stack; makes an operator's login nicer). zsh becomes each account's login
+# shell, with fzf + zoxide wired into its .zshrc by the operator role.
+biobank_shell_packages:
+  - zsh
+  - fzf
+  - zoxide
+
+# Accounts that get zsh as their login shell and the managed .zshrc block.
+biobank_zsh_accounts:
+  - { name: "biobank", home: "/home/biobank" }
+  - { name: "bbadmin", home: "/home/bbadmin" }
 
 # TLS certificate (per site). CN is the address the thick client connects to;
 # SAN must include it too (Java 7 enforces subjectAltName).
@@ -16,8 +35,10 @@ biobank_db_dump_url: "CHANGE_ME"
 # Non-secret .env values
 biobank_env_mode: "PRODUCTION"
 biobank_compose_project_name: "bb"
-biobank_uid: 1000
-biobank_gid: 1000
+# Aligned with the biobank operator account (uid/gid 1001) so container-written
+# bind-mount files (DB data, logs) are owned by that account, not orphaned.
+biobank_uid: 1001
+biobank_gid: 1001
 biobank_log_level: "INFO"
 biobank_db_host: "localhost"
 biobank_db_port: 3306

@@ -5,6 +5,8 @@
   roles:
     - role: docker
       become: true
+    - role: operator
+      become: true
 
   tasks:
     - name: Reset the SSH connection so docker group membership applies
