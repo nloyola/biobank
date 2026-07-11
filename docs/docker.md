@@ -35,6 +35,9 @@ A Docker image is available on Docker Hub [here](https://hub.docker.com/reposito
     DB_NAME=biobank
     DB_USER=biobank
     DB_PASSWORD=changeme
+
+    # Folder (relative to docker/) whose ZIPs the port-80 download page serves.
+    DOWNLOADS_DIR=../product/buildDirectory/I.BioBank
     ```
 
     Replace `changeme` with your chosen credentials.

@@ -60,6 +60,8 @@ services:
             - ./nginx-selfsigned.crt:/etc/nginx/ssl/nginx-selfsigned.crt
             - ./nginx-selfsigned.key:/etc/nginx/ssl/nginx-selfsigned.key
             - ../logs/nginx:/var/log/nginx
+            - ./downloads/index.html:/usr/share/nginx/downloads-page/index.html:ro
+            - ${DOWNLOADS_DIR:-../product/buildDirectory/I.BioBank}:/usr/share/nginx/downloads:ro
         depends_on:
             - tomcat
         #ports:
