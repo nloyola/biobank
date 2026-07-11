@@ -113,6 +113,26 @@ To stop and remove the containers:
 ./bb-stop.sh
 ```
 
+## Downloading the thick client
+
+nginx serves a download page over plain HTTP on port 80 that lists the
+thick-client ZIPs and lets users download the build for their platform.
+Browse to the host on port 80 (for example `http://192.168.50.3/`) to reach
+it. This page is separate from the application itself, which is served over
+HTTPS on 443 under `/biobank/`.
+
+The page lists whatever ZIPs are in the folder set by `DOWNLOADS_DIR` in
+`.env` (path relative to `docker/`), which defaults to the RCP product output
+at `../product/buildDirectory/I.BioBank`. The folder is bind-mounted read-only
+into the nginx container, so adding or removing a ZIP is reflected on the next
+page refresh with no restart. Point `DOWNLOADS_DIR` at a different folder to
+publish a different set of builds; if the folder is empty or missing, the page
+shows a "no downloads available" notice.
+
+Files named like `BioBank-<version>-<platform>.<arch>[_with_jre].zip` get a
+friendly label (for example "Linux 64-bit (with JRE)"); any other ZIP is
+listed under its raw filename.
+
 ## Troubleshooting
 
 ### nginx fails to load the SSL certificate
